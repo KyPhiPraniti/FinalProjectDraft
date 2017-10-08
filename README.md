@@ -11,7 +11,7 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
   - Connect with Facebook 
 - First Time User screens
   - Record your 1st task/goal
-- Calender Tab
+- Calendar Tab
   - User can plan their day and add relevant fitness task
   - User can view different days and check/plan multiple tasks
   - Tasks are sorted by ascending time
