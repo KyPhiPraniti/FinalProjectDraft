@@ -32,3 +32,11 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
     - notification preferences
   - User can upload a workout file from their device
   - User can logout via the logout button
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented user stories:
+
+<img src='https://i.imgur.com/9dIAhLQ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
