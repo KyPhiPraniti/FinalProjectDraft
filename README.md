@@ -1,5 +1,5 @@
 # FitnessTasks
-Plan ahead and schedule different tasks based on your daily activities. FitnessTask would remind you before the activity/task and after finishing, to record the details.
+Plan ahead and schedule different tasks based on your daily activities. FitnessTasks would remind you before the activity/task and after finishing, to record the details.
 - Track your progress for Strength/Cardio/HIIT workout
 - Add Fitness tasks for everyday and record completion
 - Create custom workouts from Exercise database
@@ -20,10 +20,15 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
   - Or User can create custom workout from large database of exercises
   - Imported workouts should show up here
 - Achievement Tab
-  - Progress Pics
-  - History of task completed 
+  - User can view a timeline of progress pictures
+    - User can scroll horizontally through timeline
+    - User can click individual photos to launch a larger view of photo
+  - User can view a scrollable history of completed workout tasks
+    - User can see the task title for all completed tasks
+    - User can see set/rep/duration information for non-group (i.e. single exercise) completed tasks
 - Settings
-  - Profile
-  - Import training sheets
-  - Notification Preferences 
-  - Logout
+  - User can view account settings for:
+    - the user's profile
+    - notification preferences
+  - User can upload a workout file from their device
+  - User can logout via the logout button
