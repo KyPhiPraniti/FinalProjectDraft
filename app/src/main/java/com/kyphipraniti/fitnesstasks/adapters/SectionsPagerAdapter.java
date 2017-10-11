@@ -8,13 +8,9 @@ import com.kyphipraniti.fitnesstasks.fragments.CalendarFragment;
 import com.kyphipraniti.fitnesstasks.fragments.SummaryFragment;
 import com.kyphipraniti.fitnesstasks.fragments.WorkoutFragment;
 
-/**
- * Created by praniti on 10/10/17.
- */
-
 public class SectionsPagerAdapter extends SmartFragmentStatePagerAdapter {
-    private static int NUM_ITEMS = 3;
-    private String tabTitles[] = new String[]{ "Calendar", "Workout", "Summary" };
+    private final static int NUM_ITEMS = 3;
+    private final String tabTitles[] = new String[]{ "Calendar", "Workout", "Summary" };
     private Context context;
 
     public SectionsPagerAdapter(FragmentManager fm, Context context) {
