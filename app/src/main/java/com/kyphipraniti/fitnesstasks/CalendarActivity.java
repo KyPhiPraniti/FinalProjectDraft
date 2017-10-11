@@ -1,4 +1,4 @@
-package com.phivle.fitnesstasks;
+package com.kyphipraniti.fitnesstasks;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

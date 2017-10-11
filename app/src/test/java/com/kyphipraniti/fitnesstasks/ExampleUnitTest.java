@@ -1,4 +1,4 @@
-package com.phivle.fitnesstasks;
+package com.kyphipraniti.fitnesstasks;
 
 import org.junit.Test;
 
