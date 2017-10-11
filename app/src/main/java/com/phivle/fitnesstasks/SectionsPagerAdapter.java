@@ -17,19 +17,15 @@ public class SectionsPagerAdapter extends SmartFragmentStatePagerAdapter {
     private String tabTitles[] = new String[]{ "Calendar", "Workout", "Summary" };
     private Context context;
 
-
     public SectionsPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
     }
 
-    //return total # of fragment
     @Override
     public int getCount() {
         return NUM_ITEMS;
     }
-
-    //return the fragment to use depending the position
 
     @Override
     public Fragment getItem(int position) {
@@ -43,8 +39,6 @@ public class SectionsPagerAdapter extends SmartFragmentStatePagerAdapter {
             return null;
         }
     }
-
-    //return title
 
     @Override
     public CharSequence getPageTitle(int position) {
