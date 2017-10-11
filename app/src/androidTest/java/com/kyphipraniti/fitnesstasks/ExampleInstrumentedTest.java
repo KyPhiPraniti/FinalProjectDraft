@@ -1,4 +1,4 @@
-package com.phivle.fitnesstasks;
+package com.kyphipraniti.fitnesstasks;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
