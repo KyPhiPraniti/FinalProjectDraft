@@ -1,4 +1,4 @@
-package com.phivle.fitnesstasks;
+package com.kyphipraniti.fitnesstasks.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

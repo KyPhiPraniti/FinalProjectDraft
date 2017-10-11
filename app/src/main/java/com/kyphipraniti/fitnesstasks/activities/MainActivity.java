@@ -1,9 +1,12 @@
-package com.phivle.fitnesstasks;
+package com.kyphipraniti.fitnesstasks.activities;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+
+import com.kyphipraniti.fitnesstasks.R;
+import com.kyphipraniti.fitnesstasks.adapters.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.phivle.fitnesstasks.fragments;
+package com.kyphipraniti.fitnesstasks.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,17 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.phivle.fitnesstasks.R;
+import com.kyphipraniti.fitnesstasks.R;
 
-public class WorkoutFragment extends Fragment {
+public class SummaryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public WorkoutFragment() {
+    public SummaryFragment() {
     }
 
-    public static WorkoutFragment newInstance() {
-        WorkoutFragment fragment = new WorkoutFragment();
+    public static SummaryFragment newInstance() {
+        SummaryFragment fragment = new SummaryFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -31,8 +31,9 @@ public class WorkoutFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_workout, container, false);
+        return inflater.inflate(R.layout.fragment_summary, container, false);
     }
+
 
     @Override
     public void onDetach() {
