@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "664902902274",
+    "firebase_url": "https://fitnesstasks.firebaseio.com",
+    "project_id": "fitnesstasks",
+    "storage_bucket": "fitnesstasks.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664902902274:android:4d687d8871ea0db9",
+        "android_client_info": {
+          "package_name": "com.kyphipraniti.fitnesstasks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664902902274-c5rfrkhorrr4qi01gu0i2o0evoad6blp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyphipraniti.fitnesstasks",
+            "certificate_hash": "6c36b06aff636f567b8e5d3a55282d1f0ba38436"
+          }
+        },
+        {
+          "client_id": "664902902274-top6oj42cj2rch4ruurcas390du4uegj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRe8P08_0YSxqKyrwUIcrt2mfuR1iFEFw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664902902274-top6oj42cj2rch4ruurcas390du4uegj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
