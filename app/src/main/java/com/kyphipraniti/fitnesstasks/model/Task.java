@@ -5,6 +5,7 @@ import android.database.Cursor;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -31,7 +32,7 @@ class Task {
     }
 
     Task(long id, String deadline, long amount, boolean completed) {
-        Date parsedDeadline;
+        Date parsedDeadline = null;
         this.id = id;
         this.amount = amount;
         this.completed = completed;
@@ -43,6 +44,7 @@ class Task {
                 e.printStackTrace();
             }
         }
+
         this.deadline = parsedDeadline;
     }
 }
