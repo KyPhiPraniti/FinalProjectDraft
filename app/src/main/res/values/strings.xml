@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_task">Add Task</string>
+    <string name="reps">Reps</string>
+    <string name="action_placeholder">Pushups</string>
+    <string name="amount_placeholder">200</string>
+    <string name="unit_placeholder">Reps</string>
 </resources>
