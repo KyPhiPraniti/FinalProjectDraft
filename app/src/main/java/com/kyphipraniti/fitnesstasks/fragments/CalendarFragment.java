@@ -110,7 +110,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         Date dateToday = c.getTime();
         String dayToday = DATEFORMAT.format(dateToday);
         for (int i = 0; i < 10; ++i) {
-            Task task = new Task(dayToday, (int) (Math.random() * 20) + 1, "Bench Press");
+            Task task = new Task(dayToday, (int) (Math.random() * 20) + 1, "Bench Press", false);
             mTasks.add(task);
             mTasksAdapter.notifyItemInserted(mTasks.size() - 1);
         }
@@ -185,7 +185,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         String[] workoutTasks = {"Squat", "Bench", "Deadlift", "Overhead Press" };
 
         for (int i = 0; i < (Math.random() * 10) + 1; ++i) {
-            Task task = new Task(taskDay, (int) (Math.random() * 20) + 1, workoutTasks[(int) (Math.random() * 3)]);
+            Task task = new Task(taskDay, (int) (Math.random() * 20) + 1, workoutTasks[(int) (Math.random() * 3)], false);
 
             mTasks.add(task);
             mTasksAdapter.notifyItemInserted(mTasks.size() - 1);

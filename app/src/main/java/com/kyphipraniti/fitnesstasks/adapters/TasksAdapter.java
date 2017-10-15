@@ -21,6 +21,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         mTasks = tasks;
     }
 
+    private Context getContext() {
+        return mContext;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
@@ -37,7 +41,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         holder.tvAmount.setText(String.valueOf(task.getAmount()));
         holder.tvAction.setText(task.getAction());
         holder.tvDeadline.setText(task.getDeadline().toString());
-
     }
 
     @Override
