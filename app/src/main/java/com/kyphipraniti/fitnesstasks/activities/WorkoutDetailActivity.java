@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.kyphipraniti.fitnesstasks.R;
 
+//TODO: Need to change to DialogFragment
 public class WorkoutDetailActivity extends AppCompatActivity {
     ImageView selectedImage;
 

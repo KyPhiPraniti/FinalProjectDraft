@@ -19,6 +19,10 @@
         </activity>
         <activity android:name=".activities.WorkoutDetailActivity">
         </activity>
+        <activity android:name=".activities.CreateNewWorkoutActivity">
+        </activity>
+        <activity android:name=".activities.ExerciseListActivity">
+        </activity>
     </application>
 
 </manifest>

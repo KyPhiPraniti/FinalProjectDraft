@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kyphipraniti.fitnesstasks.activities.CreateNewWorkoutActivity">
+
+    <EditText
+        android:id="@+id/etWorkoutName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:hint="Workout Name"
+        android:imeOptions="actionDone"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:textSize="15sp"/>
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/etWorkoutName"
+        android:background="#b2b2b2"/>
+
+    <TextView
+        android:id="@+id/tvExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/btnAdd"
+        android:layout_below="@+id/divider1"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:paddingTop="14dp"
+        android:text="EXERCISES"
+        android:textAllCaps="true"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tvExercise"
+        android:background="#b2b2b2"/>
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/darker_gray"
+        android:padding="10dp"
+        android:text="Add Exercise"/>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAdd"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/holo_blue_light"
+        android:padding="10dp"
+        android:text="Save Workout"/>
+</RelativeLayout>
