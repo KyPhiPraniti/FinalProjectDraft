@@ -16,8 +16,9 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
   [X] User can view different days and check/plan multiple tasks
   - Tasks are sorted by ascending time
 - Workout Tab
-  - User can add from Built-in workouts
-  - Or User can create custom workout from large database of exercises
+  - [X] User can scroll through Built-in workouts
+  - User can create custom workout from large database of exercises
+  - [X] List of exercises populated for user to choose from
   - Imported workouts should show up here
 - Summary Tab
   - User can view a timeline of progress pictures
