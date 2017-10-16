@@ -12,8 +12,8 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
 - First Time User screens
   - Record your 1st task/goal
 - Calendar Tab
-  - User can plan their day and add relevant fitness task
-  - User can view different days and check/plan multiple tasks
+  [X] User can plan their day and add relevant fitness task
+  [X] User can view different days and check/plan multiple tasks
   - Tasks are sorted by ascending time
 - Workout Tab
   - User can add from Built-in workouts
@@ -37,8 +37,8 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://i.imgur.com/9dIAhLQ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/HPfb82O.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-<img src='https://i.imgur.com/MIVGuKo.gif' title='Summaary Tab Video Walkthrough' width='' alt='Summaary Tab Video Walkthrough' />
+<img src='https://i.imgur.com/MIVGuKo.gif' title='Summary Tab Video Walkthrough' width='' alt='Summaary Tab Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
