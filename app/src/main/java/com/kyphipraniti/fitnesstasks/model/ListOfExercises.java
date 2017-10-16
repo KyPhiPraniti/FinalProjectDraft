@@ -3,10 +3,6 @@ package com.kyphipraniti.fitnesstasks.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by praniti on 10/15/17.
- */
-
 public class ListOfExercises {
 
     public static ArrayList<String> aListExercise = new ArrayList<>(Arrays.asList("Weighted Crunch",

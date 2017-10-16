@@ -28,7 +28,7 @@
             android:layout_below="@+id/image"
             android:layout_centerHorizontal="true"
             android:linksClickable="true"
-            android:text="Workout"
+            android:text="@string/workout"
             android:textColor="#000"
             android:textSize="20sp"/>
     </RelativeLayout>

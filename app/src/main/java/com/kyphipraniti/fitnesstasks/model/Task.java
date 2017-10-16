@@ -75,9 +75,9 @@ public class Task {
     private static long lastTaskId = 0;
     public static ArrayList<Task> createTasksList(int numTasks, boolean completed) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted "Z" to indicate UTC, no timezone offset
         df.setTimeZone(tz);
-        ArrayList<Task> tasks = new ArrayList<Task>();
+        ArrayList<Task> tasks = new ArrayList<>();
         for (int i = 1; i <= numTasks; i++) {
             long currTaskId = ++lastTaskId;
             String nowAsISO = df.format(new Date());
@@ -94,9 +94,9 @@ public class Task {
 
     public static ArrayList<Task> createCompletedTasksList(int numTasks) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted "Z" to indicate UTC, no timezone offset
         df.setTimeZone(tz);
-        ArrayList<Task> tasks = new ArrayList<Task>();
+        ArrayList<Task> tasks = new ArrayList<>();
         for (int i = 1; i <= numTasks; i++) {
             long currTaskId = ++lastTaskId;
             String nowAsISO = df.format(new Date());

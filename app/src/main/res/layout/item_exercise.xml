@@ -8,16 +8,15 @@
         android:id="@+id/tvExerciseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:padding="10dp"
-        android:text="Exercise Name"
+        android:text="@string/exercise_name"
         android:textSize="15sp"/>
 
     <View
         android:id="@+id/divider1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/tvExerciseName"
         android:background="#b2b2b2"/>
 
 </LinearLayout>

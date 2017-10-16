@@ -1,6 +1,7 @@
 package com.kyphipraniti.fitnesstasks.adapters;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +13,12 @@ import android.widget.Toast;
 
 import com.kyphipraniti.fitnesstasks.R;
 
-/**
- * Created by praniti on 10/15/17.
- */
-
 public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapter.ViewHolder> {
 
-    ArrayList<String> exercise;
+    List<String> exercise;
     private Context mContext;
 
-    public ExerciseListAdapter(Context context, ArrayList aListExercise) {
+    public ExerciseListAdapter(Context context, ArrayList<String> aListExercise) {
         this.exercise = aListExercise;
         mContext = context;
     }
@@ -33,8 +30,7 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
 
         View v = inflater.inflate(R.layout.item_exercise, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(v);
-        return viewHolder;
+        return new ViewHolder(v);
     }
 
     @Override
@@ -61,7 +57,7 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
         public ViewHolder(View itemView) {
             super(itemView);
 
-            name = (TextView) itemView.findViewById(R.id.tvExerciseName);
+            name = itemView.findViewById(R.id.tvExerciseName);
 
         }
     }

@@ -14,17 +14,13 @@ import android.widget.TextView;
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.activities.WorkoutDetailActivity;
 
-/**
- * Created by praniti on 10/11/17.
- */
-
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     ArrayList<String> workoutNames;
     ArrayList<Integer> workoutImages;
     Context context;
 
-    public RVAdapter(Context context, ArrayList workoutNames, ArrayList workoutImages) {
+    public RVAdapter(Context context, ArrayList<String> workoutNames, ArrayList<Integer> workoutImages) {
         this.context = context;
         this.workoutNames = workoutNames;
         this.workoutImages = workoutImages;
@@ -33,8 +29,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rowlayout, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
@@ -64,8 +59,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
-            name = (TextView) itemView.findViewById(R.id.name);
-            image = (ImageView) itemView.findViewById(R.id.image);
+            name = itemView.findViewById(R.id.name);
+            image = itemView.findViewById(R.id.image);
 
         }
     }

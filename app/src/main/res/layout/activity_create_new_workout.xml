@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:hint="Workout Name"
+        android:hint="@string/workout_name"
         android:imeOptions="actionDone"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -34,7 +34,7 @@
         android:layout_centerHorizontal="true"
         android:padding="20dp"
         android:paddingTop="14dp"
-        android:text="EXERCISES"
+        android:text="@string/exercises"
         android:textAllCaps="true"
         android:textSize="20sp"
         android:textStyle="bold"/>
@@ -55,7 +55,7 @@
         android:layout_marginTop="30dp"
         android:background="@android:color/darker_gray"
         android:padding="10dp"
-        android:text="Add Exercise"/>
+        android:text="@string/add_exercise"/>
 
     <Button
         android:id="@+id/btnSave"
@@ -66,5 +66,5 @@
         android:layout_marginTop="30dp"
         android:background="@android:color/holo_blue_light"
         android:padding="10dp"
-        android:text="Save Workout"/>
+        android:text="@string/save_workout"/>
 </RelativeLayout>

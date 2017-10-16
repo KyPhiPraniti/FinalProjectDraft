@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:text="Create New Workout"
+                android:text="@string/create_new_workout"
                 android:textColor="#000"
                 android:textSize="20sp"/>
 

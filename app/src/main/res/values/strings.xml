@@ -1,11 +1,17 @@
 <resources>
     <string name="app_name">FitnessTasks</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_task">Add Task</string>
     <string name="reps">Reps</string>
     <string name="action_placeholder">Pushups</string>
     <string name="amount_placeholder">200</string>
     <string name="unit_placeholder">Reps</string>
+    <string name="selected_image">Selected Image</string>
+    <string name="workout_name">Workout Name</string>
+    <string name="exercises">EXERCISES</string>
+    <string name="add_exercise">Add Exercise</string>
+    <string name="save_workout">Save Workout</string>
+    <string name="create_new_workout">Create New Workout</string>
+    <string name="exercise_name">Exercise Name</string>
+    <string name="workout">Workout</string>
 </resources>
