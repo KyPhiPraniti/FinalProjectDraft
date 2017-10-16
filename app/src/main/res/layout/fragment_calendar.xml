@@ -1,19 +1,33 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragments.CalendarFragment">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.CalendarFragment">
 
     <DatePicker
         android:id="@+id/datePicker"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_weight="1"
         android:calendarViewShown="false"
         android:datePickerMode="spinner" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvTasks"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/datePicker"/>
+        android:layout_height="440dp"
+        android:layout_gravity="bottom"
+        app:layout_anchor="@id/datePicker"
+        app:layout_anchorGravity="bottom"/>
 
-</RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_24dp"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>
