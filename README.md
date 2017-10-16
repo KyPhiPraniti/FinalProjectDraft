@@ -19,13 +19,13 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
   - User can add from Built-in workouts
   - Or User can create custom workout from large database of exercises
   - Imported workouts should show up here
-- Achievement Tab
+- Summary Tab
   - User can view a timeline of progress pictures
     - User can scroll horizontally through timeline
     - User can click individual photos to launch a larger view of photo
-  - User can view a scrollable history of completed workout tasks
-    - User can see the task title for all completed tasks
-    - User can see set/rep/duration information for non-group (i.e. single exercise) completed tasks
+  - [X] User can view a scrollable history of completed workout tasks
+    - [X] User can see the task title for all completed tasks
+    - [X] User can see set/rep/duration information for non-group (i.e. single exercise) completed tasks
 - Settings
   - User can view account settings for:
     - the user's profile
@@ -38,5 +38,7 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
 Here's a walkthrough of implemented user stories:
 
 <img src='https://i.imgur.com/9dIAhLQ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+<img src='https://i.imgur.com/MIVGuKo.gif' title='Summaary Tab Video Walkthrough' width='' alt='Summaary Tab Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
