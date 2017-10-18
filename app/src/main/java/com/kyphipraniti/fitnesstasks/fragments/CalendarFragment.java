@@ -69,10 +69,6 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        System.out.println(year);
-        System.out.println(month);
-        System.out.println(day);
-
         mDatePicker.init(year, month, day, this);
     }
 

@@ -5,10 +5,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="20dp"
-    app:contentPadding="5dp">
+    android:layout_margin="5dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="10dp"
+    app:contentPadding="5dp"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
