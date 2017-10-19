@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,12 +36,24 @@ import java.util.Locale;
 public class CalendarFragment extends Fragment implements DatePicker.OnDateChangedListener {
 
     private static Date currentDateView;
-    private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private final DatabaseReference dbReference = mDatabase.getReference();
     private TasksAdapter mTasksAdapter;
     private List<Task> mTasks;
     private List<Task> mAllTasks;
     private FirebaseUser currentUser;
+    private DatePicker mDatePicker;
+    private RecyclerView mRvTasks;
+    private LinearLayoutManager mLinearLayoutManager;
+    private final static DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+    private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private final DatabaseReference dbReference = mDatabase.getReference();
+
+
+    private FloatingActionButton mFabAdd;
+    private FloatingActionButton mFabAddTask;
+    private FloatingActionButton mFabAddPhoto;
+    private LinearLayout mAddTaskLayout;
+    private LinearLayout mAddPhotoLayout;
+    private boolean fabExpanded = false;
 
     public CalendarFragment() {
     }
@@ -68,7 +81,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     }
 
     private void setupDatePicker(View view) {
-        DatePicker mDatePicker = view.findViewById(R.id.dpDeadline);
+        DatePicker mDatePicker = view.findViewById(R.id.datePicker);
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
@@ -90,14 +103,55 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     }
 
     private void setupFloatingActionButton(View view) {
-        FloatingActionButton mFabAdd = view.findViewById(R.id.fabAdd);
+        mFabAdd = view.findViewById(R.id.fabAdd);
+        mFabAddTask = view.findViewById(R.id.fabAddTask);
+        mFabAddPhoto = view.findViewById(R.id.fabAddPhoto);
+
+        mAddTaskLayout = view.findViewById(R.id.layoutAddTask);
+        mAddPhotoLayout = view.findViewById(R.id.layoutAddPhoto);
+
         mFabAdd.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+                if(fabExpanded) {
+                    closeSubMenusFab();
+                } else {
+                    openSubMenusFab();
+                }
+            }
+        });
+
+        mFabAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchAddTaskFragment();
             }
         });
+
+        mFabAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                launchTakePhotoFragment();
+            }
+        });
+
+        closeSubMenusFab();
+    }
+
+    private void closeSubMenusFab(){
+        mAddTaskLayout.setVisibility(View.INVISIBLE);
+        mAddPhotoLayout.setVisibility(View.INVISIBLE);
+        mFabAdd.setImageResource(R.drawable.ic_add_24dp);
+        fabExpanded = false;
+    }
+
+    private void openSubMenusFab(){
+        mAddTaskLayout.setVisibility(View.VISIBLE);
+        mAddPhotoLayout.setVisibility(View.VISIBLE);
+        //Change settings icon to 'X' icon
+        mFabAdd.setImageResource(R.drawable.ic_close_24dp);
+        fabExpanded = true;
     }
 
     private void launchAddTaskFragment() {
