@@ -1,58 +1,82 @@
 package com.kyphipraniti.fitnesstasks.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.PropertyName;
+import com.kyphipraniti.fitnesstasks.utils.Constants;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
 
-public class Task {
+@IgnoreExtraProperties
+public class Task implements Comparator<Task>, Comparable<Task> {
 
-    private final DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-    private long id;
+    private static final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance();
+
+    private static int lastTaskId = 0;
     private String title;
-    private Date deadline;
-    private long amount;
-    private boolean completed;
-    private String action;
-    private final static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-    public Task(String deadline, long amount, String action, boolean completed) {
-        Date parsedDeadline = null;
+    private Deadline deadline;
+    @PropertyName("units")
+    private String units;
+    @PropertyName("amount")
+    private long amount;
+    @PropertyName("completed")
+    private boolean completed;
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
+    }
+
+    public void setAmount(long amount) {
+        this.amount = amount;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    @PropertyName("action")
+    private String action;
+
+    public Task() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public Task(String action, long amount, String units, Date deadline, boolean completed) {
+        this.units = units;
         this.amount = amount;
         this.completed = completed;
         this.action = action;
-
-        try {
-            parsedDeadline = iso8601Format.parse(deadline);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (parsedDeadline != null) {
-            this.deadline = parsedDeadline;
-        } else {
-            this.deadline = new Date();
-        }
-
+        this.deadline = new Deadline(deadline);
     }
 
-    private void writeTask(String deadline, long amount, String action) {
-        DatabaseReference taskRef = mDatabase.child("tasks").push();
-        String key = taskRef.getKey();
-        Task task = new Task(deadline, amount, action, false);
+    public static void writeTask(String action, long amount, String units, Date deadline) {
+        DatabaseReference taskRef = FIREBASE_DATABASE.getReference().child(Constants.FIREBASE_CHILD_TASKS).child(getUid());
 
-        mDatabase.setValue(key, task);
+        Task task = new Task(action, amount, units, deadline, false);
+        taskRef.push().setValue(task);
     }
 
-    public String getUid() {
+    private static String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
@@ -68,11 +92,14 @@ public class Task {
         return completed;
     }
 
-    public Date getDeadline() {
+    public Deadline getDeadline() {
         return deadline;
     }
 
-    private static long lastTaskId = 0;
+    public String getTitle() {
+        return title;
+    }
+
     public static ArrayList<Task> createTasksList(int numTasks, boolean completed) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted "Z" to indicate UTC, no timezone offset
@@ -80,12 +107,11 @@ public class Task {
         ArrayList<Task> tasks = new ArrayList<>();
         for (int i = 1; i <= numTasks; i++) {
             long currTaskId = ++lastTaskId;
-            String nowAsISO = df.format(new Date());
 
-            tasks.add(new Task(
-                    nowAsISO,
+            tasks.add(new Task("Task " + currTaskId,
                     new Random().nextLong(),
                     "Task " + currTaskId,
+                    new Date(),
                     i <= numTasks / 2));
         }
 
@@ -99,14 +125,43 @@ public class Task {
         ArrayList<Task> tasks = new ArrayList<>();
         for (int i = 1; i <= numTasks; i++) {
             long currTaskId = ++lastTaskId;
-            String nowAsISO = df.format(new Date());
-            tasks.add(new Task(
-                    nowAsISO,
-                    currTaskId,
+            tasks.add(new Task("Task " + currTaskId,
+                    new Random().nextLong(),
                     "Task " + currTaskId,
-                    true));
+                    new Date(),
+                    i <= numTasks / 2));
         }
 
         return tasks;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    @Override
+    public int compare(Task t1, Task t2) {
+        long t1Time = t1.getDeadline().getTimestamp();
+        long t2Time = t2.getDeadline().getTimestamp();
+        if (t1Time > t2Time) {
+            return 1;
+        } else if (t1Time < t2Time) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public int compareTo(@NonNull Task task) {
+        long thisTime = this.getDeadline().getTimestamp();
+        long taskTime = task.getDeadline().getTimestamp();
+        if (thisTime > taskTime) {
+            return 1;
+        } else if (thisTime  < taskTime) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

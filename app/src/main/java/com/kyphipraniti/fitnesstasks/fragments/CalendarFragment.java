@@ -12,10 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 
-import com.kyphipraniti.fitnesstasks.model.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
+import com.kyphipraniti.fitnesstasks.model.Task;
+import com.kyphipraniti.fitnesstasks.utils.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,16 +34,13 @@ import java.util.Locale;
 
 public class CalendarFragment extends Fragment implements DatePicker.OnDateChangedListener {
 
+    private static Date currentDateView;
+    private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private final DatabaseReference dbReference = mDatabase.getReference();
     private TasksAdapter mTasksAdapter;
     private List<Task> mTasks;
-    private DatePicker mDatePicker;
-    private RecyclerView mRvTasks;
-    private LinearLayoutManager mLinearLayoutManager;
-    private final static DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-    private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-
-    private OnFragmentInteractionListener mListener;
-    private FloatingActionButton mFabAdd;
+    private List<Task> mAllTasks;
+    private FirebaseUser currentUser;
 
     public CalendarFragment() {
     }
@@ -55,35 +59,38 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         setupDatePicker(view);
         setupRecyclerView(view);
         setupFloatingActionButton(view);
         initiateTasks();
-        super.onViewCreated(view ,savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void setupDatePicker(View view) {
-        mDatePicker = view.findViewById(R.id.datePicker);
+        DatePicker mDatePicker = view.findViewById(R.id.dpDeadline);
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         mDatePicker.init(year, month, day, this);
+        currentDateView = new Date(cal.getTimeInMillis());
     }
 
     private void setupRecyclerView(View view) {
         mTasks = new ArrayList<>();
+        mAllTasks = new ArrayList<>();
         mTasksAdapter = new TasksAdapter(mTasks);
-        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
-        mRvTasks = view.findViewById(R.id.rvTasks);
+        RecyclerView mRvTasks = view.findViewById(R.id.rvTasks);
         mRvTasks.setAdapter(mTasksAdapter);
         mRvTasks.setLayoutManager(mLinearLayoutManager);
     }
 
     private void setupFloatingActionButton(View view) {
-        mFabAdd = view.findViewById(R.id.fabAdd);
+        FloatingActionButton mFabAdd = view.findViewById(R.id.fabAdd);
         mFabAdd.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -101,95 +108,79 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
     }
 
-    private void initiateTasks() {
+    private long getStartDate() {
         Calendar c = Calendar.getInstance();
-        Date dateToday = c.getTime();
-        String dayToday = DATEFORMAT.format(dateToday);
-        for (int i = 0; i < 10; ++i) {
-            Task task = new Task(dayToday, (int) (Math.random() * 20) + 1, "Bench Press", false);
-            mTasks.add(task);
-            mTasksAdapter.notifyItemInserted(mTasks.size() - 1);
-        }
+        c.setTime(currentDateView);
+        return c.getTimeInMillis();
+    }
 
-        // Initiate with fake tasks for now.
+    private long getEndDate() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(currentDateView);
+        c.add(Calendar.DATE, 1);
+        return c.getTimeInMillis();
+    }
 
+    private void initiateTasks() {
+        dbReference.child(Constants.FIREBASE_CHILD_TASKS)
+                .child(currentUser.getUid())
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Task task = dataSnapshot.getValue(Task.class);
+                        if (task != null) {
+                            System.out.println("Action: " + task.getAction());
+                        }
 
+                        mAllTasks.add(task);
+                        mTasks.addAll(getDatesBetweenStartAndFinishWithFilter(getStartDate(), getEndDate()));
+                        mTasksAdapter.notifyItemInserted(mTasks.size());
+                    }
 
-//        DatabaseReference tasksReference = mDatabase.getReference("tasks");
-//
-//        Calendar c = Calendar.getInstance();
-//        Date dateToday = c.getTime();
-//        String dayStart = DATEFORMAT.format(dateToday);
-//        c.add(Calendar.DATE, 1);
-//        Date dateTomorrow = c.getTime();
-//        String dayEnd = DATEFORMAT.format(dateTomorrow);
-//        tasksReference.child().startAt(dayStart).endAt(dayEnd).addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                Task task = dataSnapshot.getValue(Task.class);
-//                if (task != null) {
-//                    System.out.println("Action: " + task.getAction());
-//                }
-//
-//                mTasks.add(task);
-//                mTasksAdapter.notifyItemInserted(mTasks.size() - 1);
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    private List<Task> getDatesBetweenStartAndFinishWithFilter(long start, long end) {
+            List<Task> filteredList = new ArrayList<>();
+            for (Task task : mAllTasks) {
+                if (task.getDeadline().getTimestamp() > start && task.getDeadline().getTimestamp() < end) {
+                    filteredList.add(task);
+                }
+            }
+            return filteredList;
     }
 
     @Override
     public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, day);
+
+        currentDateView = c.getTime();
+
         mTasks.clear();
+
+        mTasks.addAll(getDatesBetweenStartAndFinishWithFilter(getStartDate(), getEndDate()));
         mTasksAdapter.notifyDataSetChanged();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-
-        String taskDay = DATEFORMAT.format(calendar.getTime());
-
-        generateData(taskDay);
-    }
-
-    private void generateData(String taskDay) {
-        String[] workoutTasks = {"Squat", "Bench", "Deadlift", "Overhead Press" };
-
-        for (int i = 0; i < (Math.random() * 10) + 1; ++i) {
-            Task task = new Task(taskDay, (int) (Math.random() * 20) + 1, workoutTasks[(int) (Math.random() * 3)], false);
-
-            mTasks.add(task);
-            mTasksAdapter.notifyItemInserted(mTasks.size() - 1);
-        }
-
-    }
-
-    interface OnFragmentInteractionListener {
 
     }
 }

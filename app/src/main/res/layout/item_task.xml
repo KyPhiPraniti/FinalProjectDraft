@@ -42,7 +42,7 @@
             android:layout_below="@+id/tvAction"
             android:paddingStart="4dp"
             android:paddingEnd="2dp"
-            android:text="@string/reps"/>
+            tools:text="@string/reps"/>
 
         <TextView
             android:id="@+id/tvDeadline"

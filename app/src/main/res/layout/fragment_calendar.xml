@@ -6,9 +6,9 @@
     tools:context=".fragments.CalendarFragment">
 
     <DatePicker
-        android:id="@+id/datePicker"
+        android:id="@+id/dpDeadline"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="100dp"
         android:layout_weight="1"
         android:calendarViewShown="false"
         android:datePickerMode="spinner" />
@@ -19,7 +19,7 @@
         android:layout_height="440dp"
         android:layout_gravity="bottom"
         android:layout_weight="1"
-        app:layout_anchor="@id/datePicker"
+        app:layout_anchor="@id/dpDeadline"
         app:layout_anchorGravity="bottom"/>
 
     <android.support.design.widget.FloatingActionButton

@@ -5,18 +5,28 @@
     android:layout_height="match_parent">
 
     <DatePicker
-        android:id="@+id/datePicker"
+        android:id="@+id/dpDeadline"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="200dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
         android:layout_alignParentTop="true"
         android:gravity="center"/>
 
-    <LinearLayout
-        android:layout_alignBottom="@id/datePicker"
+    <TimePicker
+        android:id="@+id/tpDeadline"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="200dp"
+        android:layout_below="@id/dpDeadline"
+        android:timePickerMode="spinner"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_below="@id/tpDeadline"
+        android:layout_above="@+id/btnAddTask"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="center">
 
         <EditText
             android:id="@+id/etAction"

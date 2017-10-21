@@ -41,6 +41,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         holder.tvAmount.setText(String.valueOf(task.getAmount()));
         holder.tvAction.setText(task.getAction());
         holder.tvDeadline.setText(task.getDeadline().toString());
+        holder.tvUnits.setText(task.getUnits());
     }
 
     @Override
