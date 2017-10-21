@@ -14,4 +14,6 @@
     <string name="create_new_workout">Create New Workout</string>
     <string name="exercise_name">Exercise Name</string>
     <string name="workout">Workout</string>
+    <string name="facebook_app_id">1499546580081052</string>
+    <string name="fb_login_protocol_scheme">fb1499546580081052</string>
 </resources>
