@@ -1,5 +1,8 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,22 +13,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.activities.CreateNewWorkoutActivity;
 import com.kyphipraniti.fitnesstasks.adapters.RVAdapter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import static android.app.Activity.RESULT_OK;
+import static com.kyphipraniti.fitnesstasks.R.id.rv;
 
 public class WorkoutFragment extends Fragment {
 
     //TODO: Change according to Task Model
     ArrayList workoutNames = new ArrayList<>(Arrays.asList("Core Workout", "Chest Workout", "Leg Workout", "Full Body Workout"));
     ArrayList workoutImages = new ArrayList<>(Arrays.asList(R.drawable.core, R.drawable.chest_workout, R.drawable.leg_workout,
-            R.drawable.full_body_workout));
+        R.drawable.full_body_workout));
 
-    private Button btnCreateWorkout;
+    private Button mBtnCreateWorkout;
+    private final int REQUEST_CODE = 10;
+    private RVAdapter mAdapter;
+    private RecyclerView mRv;
 
     private OnFragmentInteractionListener mListener;
 
@@ -55,23 +62,22 @@ public class WorkoutFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btnCreateWorkout = view.findViewById(R.id.btn_createNewWorkout);
+        mBtnCreateWorkout = view.findViewById(R.id.btn_createNewWorkout);
 
-        RecyclerView rv = view.findViewById(R.id.rv);
-        rv.setHasFixedSize(true);
+        mRv = view.findViewById(rv);
+        mRv.setHasFixedSize(true);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        rv.setLayoutManager(llm);
+        mRv.setLayoutManager(llm);
 
-        RVAdapter adapter = new RVAdapter(getContext(), workoutNames, workoutImages);
-        rv.setAdapter(adapter);
+        mAdapter = new RVAdapter(getContext(), workoutNames, workoutImages);
+        mRv.setAdapter(mAdapter);
 
-
-        btnCreateWorkout.setOnClickListener(new View.OnClickListener() {
+        mBtnCreateWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), CreateNewWorkoutActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
@@ -81,6 +87,23 @@ public class WorkoutFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String name = data.getExtras().getString("workout");
+
+            if (name != null) {
+                int position = 0;
+                workoutNames.add(position, name);
+                workoutImages.add(position, R.drawable.placeholder);
+                mAdapter.notifyItemInserted(position);
+                mRv.scrollToPosition(position);
+                Toast.makeText(getContext(), name + " Workout Added", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public interface OnFragmentInteractionListener {
