@@ -9,19 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.kyphipraniti.fitnesstasks.R;
+import com.kyphipraniti.fitnesstasks.adapters.ProgressPhotoAdapter;
 import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class SummaryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
+
     ArrayList<Task> mTasks;
     RecyclerView rvTasks;
+
+    ArrayList<StorageReference> mProgressPhotos;
+    RecyclerView rvProgressPhotos;
 
     public SummaryFragment() {
     }
@@ -50,8 +57,15 @@ public class SummaryFragment extends Fragment {
         TasksAdapter adapter = new TasksAdapter(mTasks);
         rvTasks.setAdapter(adapter);
 
+        rvProgressPhotos = v.findViewById(R.id.rvProgressPhotos);
+        //get storage refs from database
+        mProgressPhotos = new ArrayList<>();
+        ProgressPhotoAdapter photoAdapter = new ProgressPhotoAdapter(mProgressPhotos);
+        rvProgressPhotos.setAdapter(photoAdapter);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTasks.setLayoutManager(linearLayoutManager);
+        rvProgressPhotos.setLayoutManager(linearLayoutManager);
 
         return v;
     }
