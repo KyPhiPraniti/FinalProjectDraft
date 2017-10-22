@@ -7,14 +7,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TimePicker;
 
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kyphipraniti.fitnesstasks.R;
+import com.kyphipraniti.fitnesstasks.model.Task;
+import com.kyphipraniti.fitnesstasks.utils.Utils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddTaskFragment extends DialogFragment {
 
-    private OnTaskAddListener mListener;
-    private Button mAddTaskButton;
+    private DatePicker mDeadlineDatePicker;
+    private EditText mActionEditText;
+    private EditText mAmountEditText;
+    private EditText mUnitsEditText;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private final static DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted "Z" to indicate UTC, no timezone offset
+    private TimePicker mDeadlineTimePicker;
+
 
     public AddTaskFragment() {
         // Required empty public constructor
@@ -36,23 +53,36 @@ public class AddTaskFragment extends DialogFragment {
     }
 
     private void setupViews(View view) {
-        mAddTaskButton = view.findViewById(R.id.btnAddTask);
+        Button mAddTaskButton = view.findViewById(R.id.btnAddTask);
+        mDeadlineDatePicker = view.findViewById(R.id.dpDeadline);
+        mDeadlineTimePicker = view.findViewById(R.id.tpDeadline);
+        mActionEditText = view.findViewById(R.id.etAction);
+        mAmountEditText = view.findViewById(R.id.etAmount);
+        mUnitsEditText = view.findViewById(R.id.etUnits);
+
         mAddTaskButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+
+                Date dateTime = Utils.getDateTimeFromDateTimePicker(mDeadlineDatePicker, mDeadlineTimePicker);
+
+
+                String action = mActionEditText.getText().toString();
+                String amountStr = mAmountEditText.getText().toString();
+                long amount;
+                if (amountStr.equals("")) {
+                    amount = 0;
+                } else {
+                    amount = Integer.parseInt(mAmountEditText.getText().toString());
+                }
+                String units = mUnitsEditText.getText().toString();
+
+                Task.writeTask(action, amount, units, dateTime);
+
                 dismiss();
             }
+
         });
-    }
-
-    private void onAddTaskButtonClick() {
-        if (mListener != null) {
-        }
-        dismiss();
-    }
-
-    public interface OnTaskAddListener {
-        void onTaskAdd(Task task);
     }
 }

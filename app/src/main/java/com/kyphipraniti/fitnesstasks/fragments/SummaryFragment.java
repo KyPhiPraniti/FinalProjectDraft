@@ -46,13 +46,7 @@ public class SummaryFragment extends Fragment {
 
         rvTasks = v.findViewById(R.id.rvTasks);
         mTasks = Task.createCompletedTasksList(20);
-        // sort tasks by deadline
-        Collections.sort(mTasks, new Comparator<Task>() {
-            @Override
-            public int compare(Task t1, Task t2) {
-                return t1.getDeadline().compareTo(t2.getDeadline()) * (-1);
-            }
-        });
+        Collections.sort(mTasks);
         TasksAdapter adapter = new TasksAdapter(mTasks);
         rvTasks.setAdapter(adapter);
 
