@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,8 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -27,6 +30,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
@@ -56,6 +62,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     private final static DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private final DatabaseReference dbReference = mDatabase.getReference();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
 
     private FloatingActionButton mFabAdd;
@@ -69,6 +76,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     File photoFile;
+    UploadTask uploadTask;
 
     public CalendarFragment() {
     }
@@ -99,7 +107,22 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(getContext(), "Progress picture taken!", Toast.LENGTH_SHORT).show();
+                StorageReference storageRef = storage.getReference();
+                Uri photoUri = Uri.fromFile(photoFile);
+                StorageReference progressPhotosRef = storageRef.child("images/"+photoUri.getLastPathSegment());
+                uploadTask = progressPhotosRef.putFile(photoUri);
+
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(getContext(), "Picture wasn't saved!", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(getContext(), "Progress picture taken!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             } else {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -107,7 +130,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     }
 
     private void setupDatePicker(View view) {
-        DatePicker mDatePicker = view.findViewById(R.id.datePicker);
+        DatePicker mDatePicker = view.findViewById(R.id.dpDeadline);
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
