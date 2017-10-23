@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.activities.CreateNewWorkoutActivity;
 import com.kyphipraniti.fitnesstasks.adapters.RVAdapter;
+import com.kyphipraniti.fitnesstasks.model.Workout;
 
 import static android.app.Activity.RESULT_OK;
 import static com.kyphipraniti.fitnesstasks.R.id.rv;
@@ -25,6 +26,7 @@ import static com.kyphipraniti.fitnesstasks.R.id.rv;
 public class WorkoutFragment extends Fragment {
 
     //TODO: Change according to Task Model
+    Workout workoutItems = null;
     ArrayList workoutNames = new ArrayList<>(Arrays.asList("Core Workout", "Chest Workout", "Leg Workout", "Full Body Workout"));
     ArrayList workoutImages = new ArrayList<>(Arrays.asList(R.drawable.core, R.drawable.chest_workout, R.drawable.leg_workout,
         R.drawable.full_body_workout));
@@ -93,8 +95,10 @@ public class WorkoutFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            String name = data.getExtras().getString("workout");
 
+            //Getting workout from CreateNewWorkout Activity to add on top of recyclerView
+            workoutItems = (Workout) data.getSerializableExtra("workout");
+            String name = workoutItems.getWorkoutName();
             if (name != null) {
                 int position = 0;
                 workoutNames.add(position, name);
