@@ -15,7 +15,7 @@
         android:imeOptions="actionDone"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="10dp"
+        android:paddingTop="20dp"
         android:textSize="15sp"/>
 
     <View
@@ -39,11 +39,17 @@
         android:textSize="20sp"
         android:textStyle="bold"/>
 
+    <ListView
+        android:id="@+id/lvExercises"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/tvExercise"/>
+
     <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/tvExercise"
+        android:layout_below="@id/lvExercises"
         android:background="#b2b2b2"/>
 
     <Button

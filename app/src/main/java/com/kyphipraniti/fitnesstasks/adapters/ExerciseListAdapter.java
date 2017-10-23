@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kyphipraniti.fitnesstasks.R;
 
@@ -17,10 +16,16 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
 
     List<String> exercise;
     private Context mContext;
+    private ExerciseListAdapterListener mListener;
 
-    public ExerciseListAdapter(Context context, ArrayList<String> aListExercise) {
+    public interface ExerciseListAdapterListener {
+        void onItemSelected(View view, int position);
+    }
+
+    public ExerciseListAdapter(Context context, ArrayList<String> aListExercise, ExerciseListAdapterListener listener) {
         this.exercise = aListExercise;
         mContext = context;
+        mListener = listener;
     }
 
     @Override
@@ -35,17 +40,9 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        // Get the data model based on position
         holder.name.setText(exercise.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "User clicked" + exercise.get(position) , Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
-    // Returns the total count of items in the list
     @Override
     public int getItemCount() {
         return exercise.size();
@@ -58,7 +55,16 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
             super(itemView);
 
             name = itemView.findViewById(R.id.tvExerciseName);
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        mListener.onItemSelected(view, position);
 
+                    }
+                }
+            });
         }
     }
 }
