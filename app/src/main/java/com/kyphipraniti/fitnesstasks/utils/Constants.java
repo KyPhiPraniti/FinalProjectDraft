@@ -5,4 +5,5 @@ public class Constants {
     public static final String FIREBASE_CHILD_TASKS = "tasks";
     public static final String FIREBASE_CHILD_USERS = "users";
     public static final String FIREBASE_CHILD_DEADLINE = "deadline";
+    public static final String FIREBASE_CHILD_PHOTOS = "photos";
 }

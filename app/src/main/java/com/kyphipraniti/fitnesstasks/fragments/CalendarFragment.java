@@ -120,7 +120,16 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(getContext(), "Progress picture taken!", Toast.LENGTH_SHORT).show();
+                        String key = dbReference.child(Constants.FIREBASE_CHILD_USERS)
+                                .child(currentUser.getUid())
+                                .child("photos")
+                                .push().getKey();
+                        dbReference.child(Constants.FIREBASE_CHILD_USERS)
+                                .child(currentUser.getUid())
+                                .child(Constants.FIREBASE_CHILD_PHOTOS)
+                                .child(key)
+                                .setValue(taskSnapshot.getDownloadUrl());
+                        Toast.makeText(getContext(), "Progress picture saved!", Toast.LENGTH_SHORT).show();
                     }
                 });
             } else {
