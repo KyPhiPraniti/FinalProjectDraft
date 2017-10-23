@@ -8,25 +8,27 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
 ## User Stories
 
 - Sign up (optional)
-  - Connect with Facebook 
-- First Time User screens
-  - Record your 1st task/goal
+  - [X] Connect with Facebook 
+- DataBase Integration
+  - [X] Read from fireBase
+  - [X] Write Tasks in Firebase
 - Calendar Tab
-  [X] User can plan their day and add relevant fitness task
-  [X] User can view different days and check/plan multiple tasks
+  - [X] User can plan their day and add relevant fitness task
+  - [X] User can view different days and check/plan multiple tasks
   - Tasks are sorted by ascending time
 - Workout Tab
   - [X] User can scroll through Built-in workouts Cards
-  - User can create custom workout from large database of exercises
+  - [X] User can create custom workout from large database of exercises
   - [X] List of exercises populated for user to choose from
   - Imported workouts should show up here
 - Summary Tab
-  - User can view a timeline of progress pictures
-    - User can scroll horizontally through timeline
-    - User can click individual photos to launch a larger view of photo
+  - [X] User can view a timeline of progress pictures
+  - [X] User can scroll horizontally through timeline
+  - [X] User can click individual photos to launch a larger view of photo
   - [X] User can view a scrollable history of completed workout tasks
-    - [X] User can see the task title for all completed tasks
-    - [X] User can see set/rep/duration information for non-group (i.e. single exercise) completed tasks
+  - [X] User can see the task title for all completed tasks
+  - [X] User can see set/rep/duration information for non-group (i.e. single exercise) completed tasks
+- [X] Push Notification integration
 - Settings
   - User can view account settings for:
     - the user's profile
