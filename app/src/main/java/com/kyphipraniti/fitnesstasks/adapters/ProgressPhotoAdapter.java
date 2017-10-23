@@ -1,6 +1,7 @@
 package com.kyphipraniti.fitnesstasks.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.storage.StorageReference;
 import com.kyphipraniti.fitnesstasks.R;
 
 import java.util.List;
@@ -20,10 +19,10 @@ import java.util.List;
 
 public class ProgressPhotoAdapter extends RecyclerView.Adapter<ProgressPhotoAdapter.ViewHolder> {
 
-    final private List<StorageReference> mProgressPhotos;
+    final private List<Uri> mProgressPhotos;
     private Context mContext;
 
-    public ProgressPhotoAdapter(List<StorageReference> photos) {
+    public ProgressPhotoAdapter(List<Uri> photos) {
         mProgressPhotos = photos;
     }
 
@@ -38,11 +37,9 @@ public class ProgressPhotoAdapter extends RecyclerView.Adapter<ProgressPhotoAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        StorageReference photo = mProgressPhotos.get(position);
-        Glide.with(mContext)
-                .using(new FirebaseImageLoader())
-                .load(photo)
-                .into(holder.ivPhoto);
+        Uri photo = mProgressPhotos.get(position);
+
+        Glide.with(mContext).load(photo).into(holder.ivPhoto);
     }
 
     @Override
