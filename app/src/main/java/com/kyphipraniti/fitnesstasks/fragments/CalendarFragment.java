@@ -1,7 +1,9 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -38,6 +40,7 @@ import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -76,7 +79,6 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     File photoFile;
-    UploadTask uploadTask;
 
     public CalendarFragment() {
     }
@@ -107,31 +109,10 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                StorageReference storageRef = storage.getReference();
-                Uri photoUri = Uri.fromFile(photoFile);
-                StorageReference progressPhotosRef = storageRef.child("images/"+photoUri.getLastPathSegment());
-                uploadTask = progressPhotosRef.putFile(photoUri);
+//                Bitmap takenImage = BitmapFactory.decodeFile(photoFileName);
+//                new UploadPhoto().execute(takenImage);
 
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(getContext(), "Picture wasn't saved!", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        String key = dbReference.child(Constants.FIREBASE_CHILD_USERS)
-                                .child(currentUser.getUid())
-                                .child("photos")
-                                .push().getKey();
-                        dbReference.child(Constants.FIREBASE_CHILD_USERS)
-                                .child(currentUser.getUid())
-                                .child(Constants.FIREBASE_CHILD_PHOTOS)
-                                .child(key)
-                                .setValue(taskSnapshot.getDownloadUrl());
-                        Toast.makeText(getContext(), "Progress picture saved!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                Toast.makeText(getContext(), "Picture was saved!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -329,5 +310,39 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         mTasks.addAll(getDatesBetweenStartAndFinishWithFilter(getStartDate(), getEndDate()));
         mTasksAdapter.notifyDataSetChanged();
 
+    }
+
+    private class UploadPhoto extends AsyncTask<Bitmap, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(Bitmap... bitmaps) {
+            Bitmap progressPhoto = bitmaps[0];
+            Long timestamp = System.currentTimeMillis();
+            StorageReference storageRef = storage.getReference();
+            StorageReference photoRef = storageRef.child(Constants.FIREBASE_CHILD_PHOTOS);
+            StorageReference progressPhotoRef = photoRef.child(currentUser.getUid()).child(timestamp.toString()).child(photoFileName);
+            ByteArrayOutputStream progressPhotoStream = new ByteArrayOutputStream();
+            progressPhoto.compress(Bitmap.CompressFormat.JPEG, 90, progressPhotoStream);
+            byte[] bytes = progressPhotoStream.toByteArray();
+            progressPhotoRef.putBytes(bytes).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(getContext(), "Picture wasn't saved!", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    String key = dbReference.child(Constants.FIREBASE_CHILD_USERS)
+                            .child(currentUser.getUid())
+                            .child("photos")
+                            .push().getKey();
+                    dbReference.child(Constants.FIREBASE_CHILD_USERS)
+                            .child(currentUser.getUid())
+                            .child(Constants.FIREBASE_CHILD_PHOTOS)
+                            .child(key)
+                            .setValue(taskSnapshot.getDownloadUrl());
+                }
+            });
+            return bitmaps[0];
+        }
     }
 }
