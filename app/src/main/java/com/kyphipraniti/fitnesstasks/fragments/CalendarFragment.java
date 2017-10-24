@@ -1,5 +1,15 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -40,16 +50,6 @@ import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import static android.app.Activity.RESULT_OK;
 
 public class CalendarFragment extends Fragment implements DatePicker.OnDateChangedListener {
@@ -75,7 +75,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     private LinearLayout mAddPhotoLayout;
     private boolean fabExpanded = false;
 
-    public final String APP_TAG = "FitnessTasks";
+    public final String APP_TAG = "FitTask";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     File photoFile;
