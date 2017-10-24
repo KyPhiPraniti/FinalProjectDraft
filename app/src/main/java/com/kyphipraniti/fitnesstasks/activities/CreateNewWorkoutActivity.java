@@ -14,12 +14,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.kyphipraniti.fitnesstasks.R;
+import com.kyphipraniti.fitnesstasks.model.Workout;
 
 public class CreateNewWorkoutActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnAddExercise;
     private Button btnSaveWorkout;
     private EditText etWorkoutTitle;
+    private Workout workout;
     private final int REQUEST_CODE = 20;
     ArrayAdapter<String> adapter;
     ArrayList<String> listItems = new ArrayList<>();
@@ -42,6 +44,7 @@ public class CreateNewWorkoutActivity extends AppCompatActivity implements View.
         btnAddExercise.setOnClickListener(this);
         btnSaveWorkout.setOnClickListener(this);
 
+        workout = new Workout();
     }
 
     protected ListView getListView() {
@@ -64,10 +67,15 @@ public class CreateNewWorkoutActivity extends AppCompatActivity implements View.
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
             case R.id.btnSave:
-                String workout = etWorkoutTitle.getText().toString();
+                String workoutName = etWorkoutTitle.getText().toString();
+                workout.setWorkoutName(workoutName);
+                workout.setWorkoutTasks(listItems);
                 Intent i = new Intent();
                 i.putExtra("workout", workout);
                 setResult(RESULT_OK, i);
+
+                Workout.writeWorkout(workoutName, listItems);
+
                 finish();
                 break;
         }
@@ -79,6 +87,7 @@ public class CreateNewWorkoutActivity extends AppCompatActivity implements View.
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             String name = data.getExtras().getString("exercise");
 
+            //Add chosen exercises to New Workout
             if (name != null) {
                 listItems.add(name);
                 setListAdapter(adapter);
