@@ -40,9 +40,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder notifiBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_launcher)
+        NotificationCompat.Builder notifiBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_transparent)
             .setContentTitle("Log your Fitness Task today.").setContentText(body).setAutoCancel(true).setSound
-                (notificationSound).setContentIntent(pendingIntent);
+                (notificationSound).setContentIntent(pendingIntent).setColor(getColor(R.color.notification));
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0/*ID of Notification*/, notifiBuilder.build());
