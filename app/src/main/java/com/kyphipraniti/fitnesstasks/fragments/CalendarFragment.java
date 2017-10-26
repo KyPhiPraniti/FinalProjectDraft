@@ -198,6 +198,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
         AddTaskFragment addTaskFragment = AddTaskFragment.newInstance();
         addTaskFragment.show(fm, "add");
+        closeSubMenusFab();
 
     }
 
@@ -211,6 +212,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
+        closeSubMenusFab();
     }
 
     public File getPhotoFileUri(String fileName) {
