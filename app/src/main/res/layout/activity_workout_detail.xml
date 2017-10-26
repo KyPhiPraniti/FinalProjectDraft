@@ -12,7 +12,35 @@
         android:id="@+id/selectedImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:scaleType="fitXY"
-        android:contentDescription="@string/selected_image" />
+        android:contentDescription="@string/selected_image"
+        android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:id="@+id/rlInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/selectedImage">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textColor="@android:color/black"
+            android:textSize="22sp"
+            />
+
+        <ListView
+            android:id="@+id/lvWorkoutExercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tvName"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/black"/>
+    </RelativeLayout>
 </RelativeLayout>

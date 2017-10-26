@@ -1,6 +1,6 @@
 package com.kyphipraniti.fitnesstasks.adapters;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,17 +13,16 @@ import android.widget.TextView;
 
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.activities.WorkoutDetailActivity;
+import com.kyphipraniti.fitnesstasks.model.Workout;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
-    ArrayList<String> workoutNames;
-    ArrayList<Integer> workoutImages;
+    private List<Workout> mWorkouts;
     Context context;
 
-    public RVAdapter(Context context, ArrayList<String> workoutNames, ArrayList<Integer> workoutImages) {
+    public RVAdapter(Context context, List<Workout> workouts) {
         this.context = context;
-        this.workoutNames = workoutNames;
-        this.workoutImages = workoutImages;
+        this.mWorkouts = workouts;
     }
 
     @Override
@@ -34,14 +33,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-
-        holder.name.setText(workoutNames.get(position));
-        holder.image.setImageResource(workoutImages.get(position));
+        holder.name.setText(mWorkouts.get(position).getWorkoutName());
+        holder.image.setImageResource(mWorkouts.get(position).getThumbnailDrawable());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Workout workout = mWorkouts.get(position);
                 Intent intent = new Intent(context, WorkoutDetailActivity.class);
-                intent.putExtra("image", workoutImages.get(position));
+                intent.putExtra("workout", workout);
                 context.startActivity(intent);
             }
         });
@@ -49,7 +48,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return workoutNames.size();
+        return mWorkouts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

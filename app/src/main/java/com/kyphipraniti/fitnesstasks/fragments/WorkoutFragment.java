@@ -1,7 +1,6 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,16 +24,12 @@ import static com.kyphipraniti.fitnesstasks.R.id.rv;
 
 public class WorkoutFragment extends Fragment {
 
-    //TODO: Change according to Task Model
-    Workout workoutItems = null;
-    ArrayList workoutNames = new ArrayList<>(Arrays.asList("Core Workout", "Chest Workout", "Leg Workout", "Full Body Workout"));
-    ArrayList workoutImages = new ArrayList<>(Arrays.asList(R.drawable.core, R.drawable.chest_workout, R.drawable.leg_workout,
-        R.drawable.full_body_workout));
-
+    private Workout NewAddedWorkout = null;
     private Button mBtnCreateWorkout;
     private final int REQUEST_CODE = 10;
     private RVAdapter mAdapter;
     private RecyclerView mRv;
+    private List<Workout> workouts;
 
     private OnFragmentInteractionListener mListener;
 
@@ -72,7 +67,9 @@ public class WorkoutFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         mRv.setLayoutManager(llm);
 
-        mAdapter = new RVAdapter(getContext(), workoutNames, workoutImages);
+        workouts = Workout.getWorkouts();
+
+        mAdapter = new RVAdapter(getContext(), workouts);
         mRv.setAdapter(mAdapter);
 
         mBtnCreateWorkout.setOnClickListener(new View.OnClickListener() {
@@ -97,12 +94,11 @@ public class WorkoutFragment extends Fragment {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
 
             //Getting workout from CreateNewWorkout Activity to add on top of recyclerView
-            workoutItems = (Workout) data.getSerializableExtra("workout");
-            String name = workoutItems.getWorkoutName();
+            NewAddedWorkout = (Workout) data.getSerializableExtra("workout");
+            String name = NewAddedWorkout.getWorkoutName();
             if (name != null) {
                 int position = 0;
-                workoutNames.add(position, name);
-                workoutImages.add(position, R.drawable.placeholder);
+                workouts.add(position, NewAddedWorkout);
                 mAdapter.notifyItemInserted(position);
                 mRv.scrollToPosition(position);
                 Toast.makeText(getContext(), name + " Workout Added", Toast.LENGTH_SHORT).show();
