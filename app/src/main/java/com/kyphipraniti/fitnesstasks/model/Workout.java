@@ -2,32 +2,62 @@ package com.kyphipraniti.fitnesstasks.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
 @SuppressWarnings("serial")
 public class Workout implements Serializable {
-    private String workoutName;
-    private ArrayList<String> workoutTasks;
+    private String mWorkoutName;
+    private int mThumbnailDrawable;
+    private ArrayList<String> mWorkoutTasks;
+
     private static final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance();
+
+    public Workout(String workoutName, int thumbnailDrawable, ArrayList workoutTasks) {
+        this.mWorkoutName = workoutName;
+        this.mThumbnailDrawable = thumbnailDrawable;
+        this.mWorkoutTasks = workoutTasks;
+    }
 
     public Workout() {
 
     }
 
-    public Workout(String workoutName, ArrayList workoutTasks) {
-        this.workoutName = workoutName;
-        this.workoutTasks = workoutTasks;
+    public int getThumbnailDrawable() {
+        return mThumbnailDrawable;
     }
 
-    public static void writeWorkout(String workoutName, ArrayList workoutTasks) {
+    public void setThumbnailDrawable(int mThumbnailDrawable) {
+        this.mThumbnailDrawable = mThumbnailDrawable;
+    }
+
+    public static void writeWorkout(String workoutName, int thumbnailDrawable, ArrayList workoutTasks) {
         DatabaseReference workoutRef = FIREBASE_DATABASE.getReference().child(Constants.FIREBASE_CHILD_WORKOUTS).child(getUid());
 
-        Workout workout = new Workout(workoutName, workoutTasks);
+        Workout workout = new Workout(workoutName, thumbnailDrawable, workoutTasks);
         workoutRef.push().setValue(workout);
+    }
+
+    public static List<Workout> getWorkouts() {
+        List<Workout> workouts = new ArrayList<>();
+        workouts.add(new Workout("Core Workout", R.drawable.core, new ArrayList<>(Arrays.asList("Bicycle Crunches. 3 sets, 12 "
+            + "reps", "hanging Leg Raise. 3 sets, 12 reps", "Back Extenxion. 3 sets, 12 reps", "Plank. 3 minutes"))));
+        workouts.add(new Workout("Chest Workout", R.drawable.chest_workout, new ArrayList<>(Arrays.asList("DumbBell bench " +
+            "press. 3 sets, 12 reps", "Barbell incline bench press. 3 sets, 12 reps", "Incline dumbBell fly. 3 sets, 12 reps"))));
+        workouts.add(new Workout("Leg Workout", R.drawable.leg_workout, new ArrayList<>(Arrays.asList("Barbell Squat. 4 sets, "
+            + "4-6 reps", "Dumbbell Lunges. 4 sets, 12 reps each leg", "Leg Press. 3 sets, 12-15 reps", "Lying Leg Curls. 3 " +
+            "sets, 12 reps", "Leg Extensions. 3 sets, 20 reps"))));
+        workouts.add(new Workout("Full Body Workout", R.drawable.full_body_workout, new ArrayList<>(Arrays.asList("Cable Curl. " +
+                "3 sets, 20 reps",
+            "Seated Row. 3 sets, 20 reps"))));
+
+        return workouts;
     }
 
     private static String getUid() {
@@ -35,18 +65,18 @@ public class Workout implements Serializable {
     }
 
     public String getWorkoutName() {
-        return workoutName;
+        return mWorkoutName;
     }
 
     public ArrayList<String> getWorkoutTasks() {
-        return workoutTasks;
+        return mWorkoutTasks;
     }
 
     public void setWorkoutName(String workoutName) {
-        this.workoutName = workoutName;
+        this.mWorkoutName = workoutName;
     }
 
     public void setWorkoutTasks(ArrayList<String> workoutTasks) {
-        this.workoutTasks = workoutTasks;
+        this.mWorkoutTasks = workoutTasks;
     }
 }

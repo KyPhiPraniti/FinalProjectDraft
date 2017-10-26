@@ -70,11 +70,12 @@ public class CreateNewWorkoutActivity extends AppCompatActivity implements View.
                 String workoutName = etWorkoutTitle.getText().toString();
                 workout.setWorkoutName(workoutName);
                 workout.setWorkoutTasks(listItems);
+                workout.setThumbnailDrawable(R.drawable.placeholder);
                 Intent i = new Intent();
                 i.putExtra("workout", workout);
                 setResult(RESULT_OK, i);
 
-                Workout.writeWorkout(workoutName, listItems);
+                Workout.writeWorkout(workoutName, R.drawable.placeholder, listItems);
 
                 finish();
                 break;
