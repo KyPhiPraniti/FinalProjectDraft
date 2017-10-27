@@ -54,8 +54,13 @@ public class Workout implements Serializable {
             + "4-6 reps", "Dumbbell Lunges. 4 sets, 12 reps each leg", "Leg Press. 3 sets, 12-15 reps", "Lying Leg Curls. 3 " +
             "sets, 12 reps", "Leg Extensions. 3 sets, 20 reps"))));
         workouts.add(new Workout("Full Body Workout", R.drawable.full_body_workout, new ArrayList<>(Arrays.asList("Cable Curl. " +
-                "3 sets, 20 reps",
-            "Seated Row. 3 sets, 20 reps"))));
+            "" + "" + "3 sets, 20 reps", "Seated Row. 3 sets, 20 reps"))));
+        workouts.add(new Workout("Back Workout", R.drawable.back_workout, new ArrayList<>(Arrays.asList("Wide-Grip Lat " +
+            "Pulldown. " + "3 sets, 12 reps", "Underhand Cable Pulldowns. 3 sets, 8 reps", "Bent Over Two-Dumbbell Row With " +
+            "Palms In. 3 sets, 12 reps", "Stiff-Legged Barbell Deadlift. 3 sets, 8 reps"))));
+        workouts.add(new Workout("Triceps Workout", R.drawable.triceps_workout, new ArrayList<>(Arrays.asList("Close-Grip " +
+            "Barbell Bench Press. 3 sets, 8 reps", " Standing Overhead Barbell Triceps Extension. 3 sets, 8 reps", "Triceps Pushdown. 3 " +
+            "sets, 8 reps"))));
 
         return workouts;
     }
