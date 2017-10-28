@@ -59,6 +59,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     private static Date currentDateView;
     private TasksAdapter mTasksAdapter;
     private List<Task> mTasks;
+    private static List<Task> mCompletedTasks = new ArrayList<>();
     private List<Task> mAllTasks;
     private FirebaseUser currentUser;
     private DatePicker mDatePicker;
@@ -83,6 +84,10 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     File photoFile;
 
     public CalendarFragment() {
+    }
+
+    public static List<Task> getmCompletedTasks() {
+        return mCompletedTasks;
     }
 
     public static CalendarFragment newInstance() {
@@ -144,7 +149,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         mRvTasks.setItemAnimator(new DefaultItemAnimator());
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP |
-            ItemTouchHelper.DOWN, ItemTouchHelper.LEFT){
+            ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT){
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -154,14 +159,15 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                deleteItem(viewHolder.getAdapterPosition());
+                completedTaskList(viewHolder.getAdapterPosition());
             }
 
         });
         itemTouchHelper.attachToRecyclerView(mRvTasks);
     }
 
-    private void deleteItem(int position) {
+    private void completedTaskList(int position) {
+        mCompletedTasks.add(mTasks.get(position));
         mTasks.remove(position);
         mTasksAdapter.notifyItemRemoved(position);
     }

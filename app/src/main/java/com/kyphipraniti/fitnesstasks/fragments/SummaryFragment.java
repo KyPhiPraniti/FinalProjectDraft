@@ -1,5 +1,10 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,10 +23,6 @@ import com.kyphipraniti.fitnesstasks.adapters.ProgressPhotoAdapter;
 import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
 public class SummaryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -29,7 +30,7 @@ public class SummaryFragment extends Fragment {
     private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private final DatabaseReference dbReference = mDatabase.getReference();
 
-    ArrayList<Task> mTasks;
+    List<Task> mTasks;
     RecyclerView rvTasks;
 
     ArrayList<Uri> mProgressPhotos;
@@ -58,7 +59,8 @@ public class SummaryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_summary, container, false);
 
         rvTasks = v.findViewById(R.id.rvTasks);
-        mTasks = Task.createCompletedTasksList(20);
+        mTasks = CalendarFragment.getmCompletedTasks();
+        //mTasks = Task.createCompletedTasksList(20);
         Collections.sort(mTasks);
         TasksAdapter adapter = new TasksAdapter(mTasks);
         rvTasks.setAdapter(adapter);
