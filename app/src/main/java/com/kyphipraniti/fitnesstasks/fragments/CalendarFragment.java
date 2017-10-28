@@ -23,8 +23,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,6 +141,37 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         RecyclerView mRvTasks = view.findViewById(R.id.rvTasks);
         mRvTasks.setAdapter(mTasksAdapter);
         mRvTasks.setLayoutManager(mLinearLayoutManager);
+        mRvTasks.setItemAnimator(new DefaultItemAnimator());
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP |
+            ItemTouchHelper.DOWN, ItemTouchHelper.LEFT){
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                moveItem(viewHolder.getAdapterPosition(),target.getAdapterPosition());
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                deleteItem(viewHolder.getAdapterPosition());
+            }
+
+        });
+        itemTouchHelper.attachToRecyclerView(mRvTasks);
+    }
+
+    private void deleteItem(int position) {
+        mTasks.remove(position);
+        mTasksAdapter.notifyItemRemoved(position);
+    }
+
+    private void moveItem(int oldPos, int newPos) {
+        Task task = mTasks.get(oldPos);
+
+        mTasks.remove(oldPos);
+        mTasks.add(newPos, task);
+        mTasksAdapter.notifyItemMoved(oldPos, newPos);
     }
 
     private void setupFloatingActionButton(View view) {
