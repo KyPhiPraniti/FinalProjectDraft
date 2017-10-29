@@ -67,7 +67,6 @@ public class AddTaskFragment extends DialogFragment {
 
                 Date dateTime = Utils.getDateTimeFromDateTimePicker(mDeadlineDatePicker, mDeadlineTimePicker);
 
-
                 String action = mActionEditText.getText().toString();
                 String amountStr = mAmountEditText.getText().toString();
                 long amount;

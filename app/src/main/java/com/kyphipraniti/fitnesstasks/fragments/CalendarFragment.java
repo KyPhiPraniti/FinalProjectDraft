@@ -132,6 +132,10 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
 
         mDatePicker.init(year, month, day, this);
         currentDateView = new Date(cal.getTimeInMillis());
@@ -297,13 +301,11 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Task task = dataSnapshot.getValue(Task.class);
-                        if (task != null) {
-                            System.out.println("Action: " + task.getAction());
-                        }
 
                         mAllTasks.add(task);
+                        mTasks.clear();
                         mTasks.addAll(getDatesBetweenStartAndFinishWithFilter(getStartDate(), getEndDate()));
-                        mTasksAdapter.notifyItemInserted(mTasks.size());
+                        mTasksAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -330,6 +332,9 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     }
 
     private List<Task> getDatesBetweenStartAndFinishWithFilter(long start, long end) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(start);
+        calendar.setTimeInMillis(end);
             List<Task> filteredList = new ArrayList<>();
             for (Task task : mAllTasks) {
                 if (task.getDeadline().getTimestamp() > start && task.getDeadline().getTimestamp() < end) {
@@ -343,6 +348,10 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
         Calendar c = Calendar.getInstance();
         c.set(year, month, day);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
 
         currentDateView = c.getTime();
 

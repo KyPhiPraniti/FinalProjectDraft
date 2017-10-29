@@ -37,6 +37,7 @@
 
         <EditText
             android:id="@+id/etAmount"
+            android:inputType="number"
             android:layout_width="wrap_content"
             android:textSize="24sp"
             android:layout_height="wrap_content"
