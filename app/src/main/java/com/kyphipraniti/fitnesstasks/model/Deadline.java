@@ -27,7 +27,7 @@ public class Deadline {
         this.year = CALENDAR.get(Calendar.YEAR);
         this.month = CALENDAR.get(Calendar.MONTH);
         this.day = CALENDAR.get(Calendar.DAY_OF_MONTH);
-        this.hour = CALENDAR.get(Calendar.HOUR);
+        this.hour = CALENDAR.get(Calendar.HOUR_OF_DAY);
         this.min = CALENDAR.get(Calendar.MINUTE);
         this.timestamp = CALENDAR.getTimeInMillis();
     }

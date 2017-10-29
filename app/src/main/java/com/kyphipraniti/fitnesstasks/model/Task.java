@@ -1,14 +1,5 @@
 package com.kyphipraniti.fitnesstasks.model;
 
-import android.support.annotation.NonNull;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.firebase.database.PropertyName;
-import com.kyphipraniti.fitnesstasks.utils.Constants;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +8,15 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
+
+import android.support.annotation.NonNull;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.PropertyName;
+import com.kyphipraniti.fitnesstasks.utils.Constants;
 
 @IgnoreExtraProperties
 public class Task implements Comparator<Task>, Comparable<Task> {
@@ -163,5 +163,10 @@ public class Task implements Comparator<Task>, Comparable<Task> {
         } else {
             return 0;
         }
+    }
+
+    public String getFormattedDeadline(Deadline deadline) {
+        String Time = String.valueOf(deadline.getHour()) + " : " + String.valueOf(deadline.getMin());
+        return Time;
     }
 }

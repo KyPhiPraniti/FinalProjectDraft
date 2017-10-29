@@ -1,5 +1,7 @@
 package com.kyphipraniti.fitnesstasks.adapters;
 
+import java.util.List;
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,8 +11,6 @@ import android.widget.TextView;
 
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.model.Task;
-
-import java.util.List;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
 
@@ -40,7 +40,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
 
         holder.tvAmount.setText(String.valueOf(task.getAmount()));
         holder.tvAction.setText(task.getAction());
-        holder.tvDeadline.setText(task.getDeadline().toString());
+        holder.tvDeadline.setText(task.getFormattedDeadline(task.getDeadline()));
         holder.tvUnits.setText(task.getUnits());
     }
 
