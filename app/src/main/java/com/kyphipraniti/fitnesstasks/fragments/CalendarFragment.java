@@ -86,7 +86,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     public CalendarFragment() {
     }
 
-    public static List<Task> getmCompletedTasks() {
+    public static List<Task> getCompletedTasks() {
         return mCompletedTasks;
     }
 
@@ -159,14 +159,14 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                completedTaskList(viewHolder.getAdapterPosition());
+                completeTask(viewHolder.getAdapterPosition());
             }
 
         });
         itemTouchHelper.attachToRecyclerView(mRvTasks);
     }
 
-    private void completedTaskList(int position) {
+    private void completeTask(int position) {
         mCompletedTasks.add(mTasks.get(position));
         mTasks.remove(position);
         mTasksAdapter.notifyItemRemoved(position);

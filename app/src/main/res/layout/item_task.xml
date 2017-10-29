@@ -10,11 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:backgroundTint="@color/cardview_light_background"
         android:orientation="vertical"
         app:cardCornerRadius="6dp"
         app:cardElevation="10dp"
-        app:contentPadding="5dp"
-        >
+        app:contentPadding="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,33 +28,43 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/tvDeadline"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 tools:text="Bench Press"/>
 
-            <TextView
-                android:id="@+id/tvAmount"
+            <LinearLayout
+                android:id="@+id/ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvAction"
-                tools:text="5"/>
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/shape_tag_reps_sets">
 
-            <TextView
-                android:id="@+id/tvUnits"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvAction"
-                android:layout_toEndOf="@+id/tvAmount"
-                android:layout_toStartOf="@+id/tvDeadline"
-                android:paddingEnd="2dp"
-                android:paddingStart="4dp"
-                tools:text="@string/reps"/>
+                <TextView
+                    android:id="@+id/tvUnits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/reps"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/X"/>
+
+                <TextView
+                    android:id="@+id/tvAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="5"/>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvDeadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
+                android:layout_below="@+id/ll"
                 tools:text="8:00PM"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

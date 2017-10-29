@@ -59,7 +59,7 @@ public class SummaryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_summary, container, false);
 
         rvTasks = v.findViewById(R.id.rvTasks);
-        mTasks = CalendarFragment.getmCompletedTasks();
+        mTasks = CalendarFragment.getCompletedTasks();
         //mTasks = Task.createCompletedTasksList(20);
         Collections.sort(mTasks);
         TasksAdapter adapter = new TasksAdapter(mTasks);
