@@ -49,6 +49,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
+import com.kyphipraniti.fitnesstasks.callbacks.SimpleItemTouchHelperCallback;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
@@ -59,11 +60,10 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     private static Date currentDateView;
     private TasksAdapter mTasksAdapter;
     private List<Task> mTasks;
-    private static List<Task> mCompletedTasks = new ArrayList<>();
+    private static final List<Task> mCompletedTasks = new ArrayList<>();
     private List<Task> mAllTasks;
     private FirebaseUser currentUser;
     private DatePicker mDatePicker;
-    private RecyclerView mRvTasks;
     private LinearLayoutManager mLinearLayoutManager;
     private final static DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -72,16 +72,14 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
 
     private FloatingActionButton mFabAdd;
-    private FloatingActionButton mFabAddTask;
-    private FloatingActionButton mFabAddPhoto;
     private LinearLayout mAddTaskLayout;
     private LinearLayout mAddPhotoLayout;
     private boolean fabExpanded = false;
 
-    public final String APP_TAG = "FitTask";
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    public String photoFileName = "photo.jpg";
-    File photoFile;
+    private final String APP_TAG = "FitTask";
+    private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    private final String photoFileName = "photo.jpg";
+    private File photoFile;
 
     public CalendarFragment() {
     }
@@ -148,46 +146,20 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
         RecyclerView mRvTasks = view.findViewById(R.id.rvTasks);
+        mRvTasks.setHasFixedSize(true);
         mRvTasks.setAdapter(mTasksAdapter);
         mRvTasks.setLayoutManager(mLinearLayoutManager);
         mRvTasks.setItemAnimator(new DefaultItemAnimator());
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP |
-            ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT){
-
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                moveItem(viewHolder.getAdapterPosition(),target.getAdapterPosition());
-                return true;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                completeTask(viewHolder.getAdapterPosition());
-            }
-
-        });
-        itemTouchHelper.attachToRecyclerView(mRvTasks);
-    }
-
-    private void completeTask(int position) {
-        mCompletedTasks.add(mTasks.get(position));
-        mTasks.remove(position);
-        mTasksAdapter.notifyItemRemoved(position);
-    }
-
-    private void moveItem(int oldPos, int newPos) {
-        Task task = mTasks.get(oldPos);
-
-        mTasks.remove(oldPos);
-        mTasks.add(newPos, task);
-        mTasksAdapter.notifyItemMoved(oldPos, newPos);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mTasksAdapter);
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRvTasks);
     }
 
     private void setupFloatingActionButton(View view) {
         mFabAdd = view.findViewById(R.id.fabAdd);
-        mFabAddTask = view.findViewById(R.id.fabAddTask);
-        mFabAddPhoto = view.findViewById(R.id.fabAddPhoto);
+        FloatingActionButton mFabAddTask = view.findViewById(R.id.fabAddTask);
+        FloatingActionButton mFabAddPhoto = view.findViewById(R.id.fabAddPhoto);
 
         mAddTaskLayout = view.findViewById(R.id.layoutAddTask);
         mAddPhotoLayout = view.findViewById(R.id.layoutAddPhoto);
@@ -258,7 +230,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
         closeSubMenusFab();
     }
 
-    public File getPhotoFileUri(String fileName) {
+    private File getPhotoFileUri(String fileName) {
         // Only continue if the SD Card is mounted
         if (isExternalStorageAvailable()) {
             File mediaStorageDir = new File(
@@ -269,9 +241,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
                 Log.d(APP_TAG, "failed to create directory");
             }
 
-            File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-
-            return file;
+            return new File(mediaStorageDir.getPath() + File.separator + fileName);
         }
         return null;
     }
@@ -303,19 +273,22 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
                         Task task = dataSnapshot.getValue(Task.class);
 
                         mAllTasks.add(task);
-                        mTasks.clear();
-                        mTasks.addAll(getDatesBetweenStartAndFinishWithFilter(getStartDate(), getEndDate()));
-                        mTasksAdapter.notifyDataSetChanged();
+                        if (inCurrentView(task)) {
+                            mTasks.add(task);
+                            mTasksAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        Task changingTask = dataSnapshot.getValue(Task.class);
+                        updateTask(mAllTasks, changingTask);
+                        updateTask(mTasks, changingTask);
 
                     }
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
-
                     }
 
                     @Override
@@ -331,17 +304,28 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
     }
 
-    private List<Task> getDatesBetweenStartAndFinishWithFilter(long start, long end) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(start);
-        calendar.setTimeInMillis(end);
+    private boolean inCurrentView(Task task) {
+        return (task.getDeadline().getTimestamp() > getStartDate()
+                && task.getDeadline().getTimestamp() < getEndDate()
+                && !task.isCompleted());
+    }
+
+    private List<Task> getTasksToDisplay() {
             List<Task> filteredList = new ArrayList<>();
             for (Task task : mAllTasks) {
-                if (task.getDeadline().getTimestamp() > start && task.getDeadline().getTimestamp() < end) {
+                if (inCurrentView(task)) {
                     filteredList.add(task);
                 }
             }
             return filteredList;
+    }
+
+    private void updateTask(List<Task> tasks, Task updatingTask) {
+        for (int i = 0; i < tasks.size(); ++i) {
+            if (updatingTask.getKey().equals(tasks.get(i).getKey())) {
+                tasks.set(i, updatingTask);
+            }
+        }
     }
 
     @Override
@@ -357,7 +341,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
         mTasks.clear();
 
-        mTasks.addAll(getDatesBetweenStartAndFinishWithFilter(getStartDate(), getEndDate()));
+        mTasks.addAll(getTasksToDisplay());
         mTasksAdapter.notifyDataSetChanged();
 
     }
