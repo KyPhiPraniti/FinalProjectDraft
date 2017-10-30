@@ -24,7 +24,6 @@ public class Task implements Comparator<Task>, Comparable<Task> {
     private static final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance();
 
     private static int lastTaskId = 0;
-    private String key;
     private String title;
 
     private Deadline deadline;
@@ -62,21 +61,19 @@ public class Task implements Comparator<Task>, Comparable<Task> {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Task(String action, long amount, String units, Date deadline, String key, boolean completed) {
+    public Task(String action, long amount, String units, Date deadline, boolean completed) {
         this.units = units;
         this.amount = amount;
         this.completed = completed;
         this.action = action;
-        this.key = key;
         this.deadline = new Deadline(deadline);
     }
 
     public static void writeTask(String action, long amount, String units, Date deadline) {
-        DatabaseReference taskRef = FIREBASE_DATABASE.getReference().child(Constants.FIREBASE_CHILD_TASKS).child(getUid()).push();
+        DatabaseReference taskRef = FIREBASE_DATABASE.getReference().child(Constants.FIREBASE_CHILD_TASKS).child(getUid());
 
-        String key = taskRef.getKey();
-        Task task = new Task(action, amount, units, deadline, key, false);
-        taskRef.setValue(task);
+        Task task = new Task(action, amount, units, deadline, false);
+        taskRef.push().setValue(task);
     }
 
     private static String getUid() {
@@ -103,7 +100,7 @@ public class Task implements Comparator<Task>, Comparable<Task> {
         return title;
     }
 
-    public static ArrayList<Task> createTasksList(int numTasks) {
+    public static ArrayList<Task> createTasksList(int numTasks, boolean completed) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted "Z" to indicate UTC, no timezone offset
         df.setTimeZone(tz);
@@ -115,7 +112,6 @@ public class Task implements Comparator<Task>, Comparable<Task> {
                     new Random().nextLong(),
                     "Task " + currTaskId,
                     new Date(),
-                    "",
                     i <= numTasks / 2));
         }
 
@@ -133,7 +129,6 @@ public class Task implements Comparator<Task>, Comparable<Task> {
                     new Random().nextLong(),
                     "Task " + currTaskId,
                     new Date(),
-                    "",
                     i <= numTasks / 2));
         }
 
@@ -173,9 +168,5 @@ public class Task implements Comparator<Task>, Comparable<Task> {
     public String getFormattedDeadline(Deadline deadline) {
         String Time = String.valueOf(deadline.getHour()) + " : " + String.valueOf(deadline.getMin());
         return Time;
-    }
-
-    public String getKey() {
-        return key;
     }
 }
