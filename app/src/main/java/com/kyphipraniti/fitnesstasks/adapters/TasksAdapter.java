@@ -11,12 +11,13 @@ import android.widget.TextView;
 
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.model.Task;
+import com.kyphipraniti.fitnesstasks.utils.AnimationUtil;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
 
     final private List<Task> mTasks;
     private Context mContext;
-
+    int mPreviousPosition = 0;
     public TasksAdapter(List<Task> tasks) {
         mTasks = tasks;
     }
@@ -36,12 +37,20 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+
         Task task = mTasks.get(position);
 
         holder.tvAmount.setText(String.valueOf(task.getAmount()));
         holder.tvAction.setText(task.getAction());
         holder.tvDeadline.setText(task.getFormattedDeadline(task.getDeadline()));
         holder.tvUnits.setText(task.getUnits());
+
+        if (position >= mPreviousPosition) {
+            AnimationUtil.animate(holder, true);
+        }
+
+        mPreviousPosition = position;
     }
 
     @Override
