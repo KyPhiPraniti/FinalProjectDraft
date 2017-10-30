@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kyphipraniti.fitnesstasks.R;
+import com.kyphipraniti.fitnesstasks.utils.AnimationUtil;
 
 public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapter.ViewHolder> {
 
     List<String> exercise;
+    int mPreviousPosition = 0;
     private Context mContext;
     private ExerciseListAdapterListener mListener;
 
@@ -41,6 +43,15 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.name.setText(exercise.get(position));
+
+        if (position >= mPreviousPosition) {
+            AnimationUtil.animate(holder, true);
+
+        } else {
+            AnimationUtil.animate(holder, false);
+
+        }
+        mPreviousPosition = position;
     }
 
     @Override

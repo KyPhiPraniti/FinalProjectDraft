@@ -14,11 +14,13 @@ import android.widget.TextView;
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.activities.WorkoutDetailActivity;
 import com.kyphipraniti.fitnesstasks.model.Workout;
+import com.kyphipraniti.fitnesstasks.utils.AnimationUtil;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     private List<Workout> mWorkouts;
     Context context;
+    int mPreviousPosition = 0;
 
     public RVAdapter(Context context, List<Workout> workouts) {
         this.context = context;
@@ -44,6 +46,15 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
+
+        if (position >= mPreviousPosition) {
+            AnimationUtil.animate(holder, true);
+
+        } else {
+            AnimationUtil.animate(holder, false);
+
+        }
+        mPreviousPosition = position;
     }
 
     @Override
