@@ -1,7 +1,6 @@
 package com.kyphipraniti.fitnesstasks.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +18,10 @@ import java.util.List;
 
 public class ProgressPhotoAdapter extends RecyclerView.Adapter<ProgressPhotoAdapter.ViewHolder> {
 
-    final private List<Uri> mProgressPhotos;
+    final private List<String> mProgressPhotos;
     private Context mContext;
 
-    public ProgressPhotoAdapter(List<Uri> photos) {
+    public ProgressPhotoAdapter(List<String> photos) {
         mProgressPhotos = photos;
     }
 
@@ -37,9 +36,12 @@ public class ProgressPhotoAdapter extends RecyclerView.Adapter<ProgressPhotoAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Uri photo = mProgressPhotos.get(position);
+        String downloadUrl = mProgressPhotos.get(position);
 
-        Glide.with(mContext).load(photo).into(holder.ivPhoto);
+        Glide.with(mContext)
+                .load(downloadUrl)
+                .placeholder(R.drawable.ic_photo_24dp)
+                .into(holder.ivPhoto);
     }
 
     @Override

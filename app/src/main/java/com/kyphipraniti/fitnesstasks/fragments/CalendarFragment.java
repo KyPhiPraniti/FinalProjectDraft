@@ -1,17 +1,10 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -52,6 +45,16 @@ import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static android.app.Activity.RESULT_OK;
 
 public class CalendarFragment extends Fragment implements DatePicker.OnDateChangedListener {
@@ -62,10 +65,6 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     private static List<Task> mCompletedTasks = new ArrayList<>();
     private List<Task> mAllTasks;
     private FirebaseUser currentUser;
-    private DatePicker mDatePicker;
-    private RecyclerView mRvTasks;
-    private LinearLayoutManager mLinearLayoutManager;
-    private final static DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private final DatabaseReference dbReference = mDatabase.getReference();
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -116,10 +115,9 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-//                Bitmap takenImage = BitmapFactory.decodeFile(photoFileName);
-//                new UploadPhoto().execute(takenImage);
+                Bitmap takenImage = rotateBitmapOrientation(photoFile.getPath());
+                new UploadPhoto().execute(takenImage);
 
-                Toast.makeText(getContext(), "Picture was saved!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -370,6 +368,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
             StorageReference storageRef = storage.getReference();
             StorageReference photoRef = storageRef.child(Constants.FIREBASE_CHILD_PHOTOS);
             StorageReference progressPhotoRef = photoRef.child(currentUser.getUid()).child(timestamp.toString()).child(photoFileName);
+            Log.d("UploadPhoto", progressPhotoRef.toString());
             ByteArrayOutputStream progressPhotoStream = new ByteArrayOutputStream();
             progressPhoto.compress(Bitmap.CompressFormat.JPEG, 90, progressPhotoStream);
             byte[] bytes = progressPhotoStream.toByteArray();
@@ -385,14 +384,48 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
                             .child(currentUser.getUid())
                             .child("photos")
                             .push().getKey();
-                    dbReference.child(Constants.FIREBASE_CHILD_USERS)
-                            .child(currentUser.getUid())
-                            .child(Constants.FIREBASE_CHILD_PHOTOS)
-                            .child(key)
-                            .setValue(taskSnapshot.getDownloadUrl());
+                    Map<String, Object> updatedPhotoData = new HashMap<>();
+                    updatedPhotoData.put(Constants.FIREBASE_CHILD_USERS + "/" + currentUser.getUid() + "/" + Constants.FIREBASE_CHILD_PHOTOS + "/" + key, taskSnapshot.getDownloadUrl().toString());
+                    dbReference.updateChildren(updatedPhotoData, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                            } else {
+                                Log.e("UploadPhoto", databaseError.getMessage());
+                            }
+                        }
+                    });
                 }
             });
             return bitmaps[0];
         }
+    }
+
+    public Bitmap rotateBitmapOrientation(String photoFilePath) {
+        // Create and configure BitmapFactory
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoFilePath, bounds);
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        Bitmap bm = BitmapFactory.decodeFile(photoFilePath, opts);
+        // Read EXIF Data
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(photoFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+        int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
+        int rotationAngle = 0;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) rotationAngle = 90;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) rotationAngle = 180;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
+        // Rotate Bitmap
+        Matrix matrix = new Matrix();
+        matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+        // Return result
+        return rotatedBitmap;
     }
 }
