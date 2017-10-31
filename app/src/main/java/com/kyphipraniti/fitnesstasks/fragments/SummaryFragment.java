@@ -1,5 +1,8 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,10 +27,6 @@ import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class SummaryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -38,6 +37,7 @@ public class SummaryFragment extends Fragment {
 
     List<Task> mTasks;
     RecyclerView rvTasks;
+    TasksAdapter mTaskAdapter;
 
     ArrayList<String> mProgressPhotos;
     RecyclerView rvProgressPhotos;
@@ -65,11 +65,10 @@ public class SummaryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_summary, container, false);
 
         rvTasks = v.findViewById(R.id.rvTasks);
-        mTasks = CalendarFragment.getCompletedTasks();
-        //mTasks = Task.createCompletedTasksList(20);
-        Collections.sort(mTasks);
-        TasksAdapter adapter = new TasksAdapter(mTasks);
-        rvTasks.setAdapter(adapter);
+        mTasks = new ArrayList<>();
+        //mTasks = CalendarFragment.getCompletedTasks();
+        mTaskAdapter = new TasksAdapter(mTasks);
+        rvTasks.setAdapter(mTaskAdapter);
 
         rvProgressPhotos = v.findViewById(R.id.rvProgressPhotos);
         mProgressPhotos = new ArrayList<>();
@@ -90,6 +89,7 @@ public class SummaryFragment extends Fragment {
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        readCompletedTasks();
         final Query progressPhotos = dbReference.child(Constants.FIREBASE_CHILD_USERS).child(currentUser.getUid()).child(Constants.FIREBASE_CHILD_PHOTOS);
         progressPhotos.addChildEventListener(new ChildEventListener() {
             @Override
@@ -118,6 +118,42 @@ public class SummaryFragment extends Fragment {
 
             }
         });
+    }
+
+    private void readCompletedTasks() {
+            dbReference.child(Constants.FIREBASE_CHILD_TASKS)
+                .child(currentUser.getUid())
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Task task = dataSnapshot.getValue(Task.class);
+
+                        if (task.isCompleted()) {
+                            mTasks.add(task);
+                            mTaskAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
     }
 
     @Override

@@ -1,5 +1,15 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,16 +55,6 @@ import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static android.app.Activity.RESULT_OK;
 
 public class CalendarFragment extends Fragment implements DatePicker.OnDateChangedListener {
@@ -62,7 +62,6 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     private static Date currentDateView;
     private TasksAdapter mTasksAdapter;
     private List<Task> mTasks;
-    private static List<Task> mCompletedTasks = new ArrayList<>();
     private List<Task> mAllTasks;
     private FirebaseUser currentUser;
     private final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -81,12 +80,9 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     File photoFile;
+    private final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public CalendarFragment() {
-    }
-
-    public static List<Task> getCompletedTasks() {
-        return mCompletedTasks;
     }
 
     public static CalendarFragment newInstance() {
@@ -169,7 +165,17 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     }
 
     private void completeTask(int position) {
-        mCompletedTasks.add(mTasks.get(position));
+        Task changingTask = mTasks.get(position);
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(Constants.FIREBASE_CHILD_COMPLETED, true);
+        if(mCurrentUser != null) {
+            dbReference.child(Constants.FIREBASE_CHILD_TASKS)
+                .child(mCurrentUser.getUid())
+                .child(changingTask.getKey())
+                .updateChildren(childUpdates);
+        }
+
+
         mTasks.remove(position);
         mTasksAdapter.notifyItemRemoved(position);
     }
@@ -301,14 +307,17 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
                         Task task = dataSnapshot.getValue(Task.class);
 
                         mAllTasks.add(task);
-                        mTasks.clear();
-                        mTasks.addAll(getDatesBetweenStartAndFinishWithFilter(getStartDate(), getEndDate()));
-                        mTasksAdapter.notifyDataSetChanged();
+                        if (inCurrentView(task)) {
+                            mTasks.add(task);
+                            mTasksAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                        Task changingTask = dataSnapshot.getValue(Task.class);
+                        updateTask(mAllTasks, changingTask);
+                        updateTask(mTasks, changingTask);
                     }
 
                     @Override
@@ -329,17 +338,28 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
     }
 
-    private List<Task> getDatesBetweenStartAndFinishWithFilter(long start, long end) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(start);
-        calendar.setTimeInMillis(end);
-            List<Task> filteredList = new ArrayList<>();
-            for (Task task : mAllTasks) {
-                if (task.getDeadline().getTimestamp() > start && task.getDeadline().getTimestamp() < end) {
-                    filteredList.add(task);
-                }
+    private void updateTask(List<Task> tasks, Task updatingTask) {
+        for (int i = 0; i < tasks.size(); ++i) {
+            if (updatingTask.getKey().equals(tasks.get(i).getKey())) {
+                tasks.set(i, updatingTask);
             }
-            return filteredList;
+        }
+    }
+
+    private boolean inCurrentView(Task task) {
+        return (task.getDeadline().getTimestamp() > getStartDate()
+            && task.getDeadline().getTimestamp() < getEndDate()
+            && !task.isCompleted());
+    }
+
+    private List<Task> getTasksToDisplay() {
+        List<Task> filteredList = new ArrayList<>();
+        for (Task task : mAllTasks) {
+            if (inCurrentView(task)) {
+                filteredList.add(task);
+            }
+        }
+        return filteredList;
     }
 
     @Override
@@ -355,7 +375,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
         mTasks.clear();
 
-        mTasks.addAll(getDatesBetweenStartAndFinishWithFilter(getStartDate(), getEndDate()));
+        mTasks.addAll(getTasksToDisplay());
         mTasksAdapter.notifyDataSetChanged();
 
     }
