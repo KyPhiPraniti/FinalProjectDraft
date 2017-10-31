@@ -1,8 +1,5 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +25,10 @@ import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class SummaryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -42,6 +44,7 @@ public class SummaryFragment extends Fragment {
     ArrayList<String> mProgressPhotos;
     RecyclerView rvProgressPhotos;
     ProgressPhotoAdapter progressPhotoAdapter;
+    TextView tvProgressPhotos;
 
     public SummaryFragment() {
     }
@@ -65,11 +68,14 @@ public class SummaryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_summary, container, false);
 
         rvTasks = v.findViewById(R.id.rvTasks);
+
         mTasks = new ArrayList<>();
         //mTasks = CalendarFragment.getCompletedTasks();
-        mTaskAdapter = new TasksAdapter(mTasks);
-        rvTasks.setAdapter(mTaskAdapter);
+        Collections.sort(mTasks);
+        TasksAdapter adapter = new TasksAdapter(mTasks);
+        rvTasks.setAdapter(adapter);
 
+        tvProgressPhotos = v.findViewById(R.id.tvProgressPhotos);
         rvProgressPhotos = v.findViewById(R.id.rvProgressPhotos);
         mProgressPhotos = new ArrayList<>();
         progressPhotoAdapter = new ProgressPhotoAdapter(mProgressPhotos);
@@ -94,6 +100,9 @@ public class SummaryFragment extends Fragment {
         progressPhotos.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (tvProgressPhotos.getVisibility() != View.VISIBLE) {
+                    tvProgressPhotos.setVisibility(View.VISIBLE);
+                }
                 mProgressPhotos.add(dataSnapshot.getValue(String.class));
                 progressPhotoAdapter.notifyItemInserted(mProgressPhotos.size());
             }

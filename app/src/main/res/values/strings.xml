@@ -18,4 +18,6 @@
     <string name="facebook_app_id">1499546580081052</string>
     <string name="fb_login_protocol_scheme">fb1499546580081052</string>
     <string name="take_photo">Take Progress Photo</string>
+    <string name="progress_photos">Progress Photos</string>
+    <string name="completed_tasks">Completed Tasks</string>
 </resources>

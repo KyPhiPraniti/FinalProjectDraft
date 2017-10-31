@@ -3,18 +3,44 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/tvProgressPhotos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/progress_photos"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="15sp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvProgressPhotos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal"
+        android:layout_below="@+id/tvProgressPhotos"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/tvCompletedTasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/completed_tasks"
+        android:layout_below="@+id/rvProgressPhotos"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTasks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@+id/rvProgressPhotos"
+        android:layout_below="@+id/tvCompletedTasks"
         android:layout_alignParentStart="true" />
 
 </RelativeLayout>

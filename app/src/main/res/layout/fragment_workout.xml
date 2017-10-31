@@ -28,7 +28,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:text="@string/create_new_workout"
-                android:textColor="#000"
+                android:background="@drawable/button"
+                android:textColor="@android:color/white"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textSize="20sp"/>
 
         </RelativeLayout>
