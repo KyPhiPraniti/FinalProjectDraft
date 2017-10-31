@@ -163,7 +163,7 @@ public class Task implements Comparator<Task>, Comparable<Task> {
     }
 
     public String getFormattedDeadline(Deadline deadline) {
-        String Time = String.valueOf(deadline.getHour()) + " : " + String.valueOf(deadline.getMin());
+        String Time = String.format("%02d : %02d", deadline.getHour(), deadline.getMin());
         return Time;
     }
 
