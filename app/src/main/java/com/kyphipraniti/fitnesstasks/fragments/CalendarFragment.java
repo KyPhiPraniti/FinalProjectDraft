@@ -349,7 +349,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
     private boolean inCurrentView(Task task) {
         return (task.getDeadline().getTimestamp() > getStartDate()
             && task.getDeadline().getTimestamp() < getEndDate()
-            && !task.isCompleted());
+            && !task.getCompleted());
     }
 
     private List<Task> getTasksToDisplay() {
