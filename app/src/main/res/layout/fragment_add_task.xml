@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:hint="@string/action_placeholder"
+        android:inputType="textCapWords"
         android:textSize="18sp"/>
 
 
