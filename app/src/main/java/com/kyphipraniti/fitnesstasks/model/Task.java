@@ -17,6 +17,21 @@ import java.util.Date;
 @IgnoreExtraProperties
 public class Task implements Comparator<Task>, Comparable<Task>, Parcelable {
 
+    private static final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance();
+    private String key;
+
+    @PropertyName("title")
+    private String title;
+    private Deadline deadline;
+    @PropertyName("units")
+    private String units;
+    @PropertyName("amount")
+    private long amount;
+    @PropertyName("completed")
+    private boolean completed;
+    @PropertyName("action")
+    private String action;
+
     public static final Creator<Task> CREATOR = new Creator<Task>() {
         @Override
         public Task createFromParcel(Parcel in) {
@@ -28,19 +43,11 @@ public class Task implements Comparator<Task>, Comparable<Task>, Parcelable {
             return new Task[size];
         }
     };
-    private static final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance();
-    private String key;
-    private String title;
 
-    private Deadline deadline;
-    @PropertyName("units")
-    private String units;
-    @PropertyName("amount")
-    private long amount;
-    @PropertyName("completed")
-    private boolean completed;
-    @PropertyName("action")
-    private String action;
+    public Task() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
 
     protected Task(Parcel in) {
         key = in.readString();
@@ -49,10 +56,6 @@ public class Task implements Comparator<Task>, Comparable<Task>, Parcelable {
         amount = in.readLong();
         completed = in.readByte() != 0;
         action = in.readString();
-    }
-
-    public Task() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
     public Task(String action, long amount, String units, Date deadline, String key, boolean completed) {
@@ -96,10 +99,6 @@ public class Task implements Comparator<Task>, Comparable<Task>, Parcelable {
         this.amount = amount;
     }
 
-    public Deadline getDeadline() {
-        return deadline;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -115,6 +114,27 @@ public class Task implements Comparator<Task>, Comparable<Task>, Parcelable {
     public void setUnits(String units) {
         this.units = units;
     }
+
+    public Deadline getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Deadline deadline) {
+        this.deadline = deadline;
+    }
+
+    public boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
 
     @Override
     public int compare(Task t1, Task t2) {
@@ -161,14 +181,4 @@ public class Task implements Comparator<Task>, Comparable<Task>, Parcelable {
         parcel.writeString(this.getAction());
     }
 
-    public boolean getCompleted() { return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-
-    public String getKey() {
-        return key;
-    }
 }
