@@ -4,9 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -23,21 +21,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.receivers.WakefulReceiver;
-import com.kyphipraniti.fitnesstasks.utils.Constants;
 import com.kyphipraniti.fitnesstasks.utils.Utils;
 
 public class AddTaskFragment extends DialogFragment {
-
-    private static final String TAG = "DialogFragment";
 
     private DatePicker mDeadlineDatePicker;
     private EditText mActionEditText;
     private EditText mAmountEditText;
     private EditText mUnitsEditText;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    private final static DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted "Z" to indicate UTC, no timezone offset
+    private final static DateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted
+    // "Z" to indicate UTC, no timezone offset
     private TimePicker mDeadlineTimePicker;
-
 
 
     public AddTaskFragment() {

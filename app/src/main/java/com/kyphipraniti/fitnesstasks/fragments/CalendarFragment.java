@@ -157,6 +157,7 @@ public class CalendarFragment extends Fragment implements DatePicker.OnDateChang
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                Toast.makeText(getContext(), "Task is completed !!", Toast.LENGTH_SHORT).show();
                 completeTask(viewHolder.getAdapterPosition());
             }
 
