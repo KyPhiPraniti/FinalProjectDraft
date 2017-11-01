@@ -7,11 +7,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.v4.app.AlarmManagerCompat;
+import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
-import com.kyphipraniti.fitnesstasks.activities.MainActivity;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.NotificationUtil;
 
@@ -24,14 +23,19 @@ public class WakefulReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Task task = intent.getParcelableExtra("task");
+        // We bundle the parcel because of issues with Pending Intent being unable
+        // to get custom parcelable objects
+        Bundle taskBundle = intent.getBundleExtra("taskBundle");
+        Task task = taskBundle.getParcelable("task");
         WakefulReceiver.completeWakefulIntent(context, task);
     }
 
     public void setAlarm(Context context, Task task) {
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, WakefulReceiver.class);
-        intent.putExtra("task", task);
+        Bundle taskBundle = new Bundle();
+        taskBundle.putParcelable("task", task);
+        intent.putExtra("taskBundle", taskBundle);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
