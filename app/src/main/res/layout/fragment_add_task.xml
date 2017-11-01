@@ -1,67 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    <DatePicker
-        android:id="@+id/dpDeadline"
+
+    <EditText
+        android:id="@+id/etAction"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        android:layout_alignParentTop="true"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:hint="@string/action_placeholder"
+        android:textSize="18sp"/>
+
+
+    <LinearLayout
+        android:id="@+id/llUnit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etAction"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <EditText
+            android:id="@+id/etAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:hint="@string/amount_placeholder"
+            android:inputType="number"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tvX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="X"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/etUnits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:hint="@string/unit_placeholder"
+            android:inputType="number"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llUnit"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="30dp"
+        android:text="Pick a Time:"
+        android:textSize="18sp"/>
 
     <TimePicker
         android:id="@+id/tpDeadline"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@id/dpDeadline"
+        android:layout_height="150dp"
+        android:layout_below="@+id/tvTime"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:timePickerMode="spinner"
-        android:gravity="center"/>
+        android:windowSoftInputMode="stateHidden"/>
 
-    <LinearLayout
-        android:layout_below="@id/tpDeadline"
-        android:layout_above="@+id/btnAddTask"
+    <DatePicker
+        android:id="@+id/dpDeadline"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:gravity="center">
-
-        <EditText
-            android:id="@+id/etAction"
-            android:lines="1"
-            android:inputType="textCapWords"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/action_placeholder"
-            android:textSize="24sp"/>
-
-        <EditText
-            android:id="@+id/etAmount"
-            android:inputType="number"
-            android:layout_width="wrap_content"
-            android:textSize="24sp"
-            android:layout_height="wrap_content"
-            android:hint="@string/amount_placeholder"/>
-
-        <EditText
-            android:id="@+id/etUnits"
-            android:lines="1"
-            android:inputType="textCapWords"
-            android:textSize="24sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/unit_placeholder"/>
-
-    </LinearLayout>
+        android:layout_height="50dp"
+        android:layout_below="@+id/tpDeadline"
+        android:layout_marginTop="20dp"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnAddTask"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tpDeadline"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:background="@color/primary"
         android:text="@string/add_task"/>
 
 </RelativeLayout>
