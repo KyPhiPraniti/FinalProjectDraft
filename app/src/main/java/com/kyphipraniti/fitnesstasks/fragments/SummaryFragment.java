@@ -134,7 +134,7 @@ public class SummaryFragment extends Fragment {
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Task task = dataSnapshot.getValue(Task.class);
 
-                        if (task.isCompleted()) {
+                        if (task.getCompleted()) {
                             mTasks.add(task);
                             mTaskAdapter.notifyDataSetChanged();
                         }

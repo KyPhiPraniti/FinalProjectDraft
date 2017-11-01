@@ -30,6 +30,8 @@
 
         <EditText
             android:id="@+id/etAction"
+            android:lines="1"
+            android:inputType="textCapWords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/action_placeholder"
@@ -45,6 +47,8 @@
 
         <EditText
             android:id="@+id/etUnits"
+            android:lines="1"
+            android:inputType="textCapWords"
             android:textSize="24sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

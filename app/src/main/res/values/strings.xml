@@ -20,4 +20,5 @@
     <string name="take_photo">Take Progress Photo</string>
     <string name="progress_photos">Progress Photos</string>
     <string name="completed_tasks">Completed Tasks</string>
+    <string name="notification_channel_task">task</string>
 </resources>

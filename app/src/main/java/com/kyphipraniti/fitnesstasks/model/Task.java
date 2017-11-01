@@ -1,8 +1,7 @@
 package com.kyphipraniti.fitnesstasks.model;
 
-import java.util.Comparator;
-import java.util.Date;
-
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,14 +11,26 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.PropertyName;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
 
+import java.util.Comparator;
+import java.util.Date;
+
 @IgnoreExtraProperties
-public class Task implements Comparator<Task>, Comparable<Task> {
+public class Task implements Comparator<Task>, Comparable<Task>, Parcelable {
 
+    public static final Creator<Task> CREATOR = new Creator<Task>() {
+        @Override
+        public Task createFromParcel(Parcel in) {
+            return new Task(in);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
     private static final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance();
-
-    private static int lastTaskId = 0;
-    private String title;
     private String key;
+    private String title;
 
     private Deadline deadline;
     @PropertyName("units")
@@ -28,29 +39,17 @@ public class Task implements Comparator<Task>, Comparable<Task> {
     private long amount;
     @PropertyName("completed")
     private boolean completed;
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setUnits(String units) {
-        this.units = units;
-    }
-
-    public void setAmount(long amount) {
-        this.amount = amount;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
     @PropertyName("action")
     private String action;
+
+    protected Task(Parcel in) {
+        key = in.readString();
+        title = in.readString();
+        units = in.readString();
+        amount = in.readLong();
+        completed = in.readByte() != 0;
+        action = in.readString();
+    }
 
     public Task() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -65,12 +64,16 @@ public class Task implements Comparator<Task>, Comparable<Task> {
         this.deadline = new Deadline(deadline);
     }
 
-    public static void writeTask(String action, long amount, String units, Date deadline) {
-        DatabaseReference taskRef = FIREBASE_DATABASE.getReference().child(Constants.FIREBASE_CHILD_TASKS).child(getUid()).push();
+    public static Task writeTask(String action, long amount, String units, Date deadline) {
+        DatabaseReference taskRef;
+        String key;
+        Task task;
 
-        String key = taskRef.getKey();
-        Task task = new Task(action, amount, units, deadline, key, false);
+        taskRef = FIREBASE_DATABASE.getReference().child(Constants.FIREBASE_CHILD_TASKS).child(getUid()).push();
+        key = taskRef.getKey();
+        task = new Task(action, amount, units, deadline, key, false);
         taskRef.setValue(task);
+        return task;
     }
 
     private static String getUid() {
@@ -81,12 +84,16 @@ public class Task implements Comparator<Task>, Comparable<Task> {
         return action;
     }
 
+    public void setAction(String action) {
+        this.action = action;
+    }
+
     public long getAmount() {
         return amount;
     }
 
-    public boolean isCompleted() {
-        return completed;
+    public void setAmount(long amount) {
+        this.amount = amount;
     }
 
     public Deadline getDeadline() {
@@ -97,43 +104,16 @@ public class Task implements Comparator<Task>, Comparable<Task> {
         return title;
     }
 
-//    public static ArrayList<Task> createTasksList(int numTasks, boolean completed) {
-//        TimeZone tz = TimeZone.getTimeZone("UTC");
-//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted "Z" to indicate UTC, no timezone offset
-//        df.setTimeZone(tz);
-//        ArrayList<Task> tasks = new ArrayList<>();
-//        for (int i = 1; i <= numTasks; i++) {
-//            long currTaskId = ++lastTaskId;
-//
-//            tasks.add(new Task("Task " + currTaskId,
-//                    new Random().nextLong(),
-//                    "Task " + currTaskId,
-//                    new Date(),
-//                    i <= numTasks / 2));
-//        }
-//
-//        return tasks;
-//    }
-
-//    public static ArrayList<Task> createCompletedTasksList(int numTasks) {
-//        TimeZone tz = TimeZone.getTimeZone("UTC");
-//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()); // Quoted "Z" to indicate UTC, no timezone offset
-//        df.setTimeZone(tz);
-//        ArrayList<Task> tasks = new ArrayList<>();
-//        for (int i = 1; i <= numTasks; i++) {
-//            long currTaskId = ++lastTaskId;
-//            tasks.add(new Task("Task " + currTaskId,
-//                    new Random().nextLong(),
-//                    "Task " + currTaskId,
-//                    new Date(),
-//                    i <= numTasks / 2));
-//        }
-//
-//        return tasks;
-//    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getUnits() {
         return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 
     @Override
@@ -155,7 +135,7 @@ public class Task implements Comparator<Task>, Comparable<Task> {
         long taskTime = task.getDeadline().getTimestamp();
         if (thisTime > taskTime) {
             return 1;
-        } else if (thisTime  < taskTime) {
+        } else if (thisTime < taskTime) {
             return -1;
         } else {
             return 0;
@@ -163,8 +143,29 @@ public class Task implements Comparator<Task>, Comparable<Task> {
     }
 
     public String getFormattedDeadline(Deadline deadline) {
-        String Time = String.format("%02d : %02d", deadline.getHour(), deadline.getMin());
-        return Time;
+        return String.format("%02d : %02d", deadline.getHour(), deadline.getMin());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.getKey());
+        parcel.writeString(this.getTitle());
+        parcel.writeString(this.getUnits());
+        parcel.writeLong(this.getAmount());
+        parcel.writeByte((byte) (this.getCompleted() ? 1 : 0));
+        parcel.writeString(this.getAction());
+    }
+
+    public boolean getCompleted() { return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public String getKey() {
