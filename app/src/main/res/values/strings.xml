@@ -4,8 +4,8 @@
     <string name="add_task">Add Task</string>
     <string name="reps">Reps</string>
     <string name="X">\u0020X\u0020</string>
-    <string name="action_placeholder">Pushups</string>
-    <string name="amount_placeholder">200</string>
+    <string name="action_placeholder">Exercise</string>
+    <string name="amount_placeholder">Sets</string>
     <string name="unit_placeholder">Reps</string>
     <string name="selected_image">Selected Image</string>
     <string name="workout_name">Workout Name</string>

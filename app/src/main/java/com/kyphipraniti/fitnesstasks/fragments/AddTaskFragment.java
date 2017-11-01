@@ -1,5 +1,10 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -17,12 +22,9 @@ import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Utils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class AddTaskFragment extends DialogFragment {
+
+    private static final String TAG = "DialogFragment";
 
     private DatePicker mDeadlineDatePicker;
     private EditText mActionEditText;
@@ -47,9 +49,17 @@ public class AddTaskFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getDialog().setTitle("Add Task");
         View view = inflater.inflate(R.layout.fragment_add_task, container, false);
         setupViews(view);
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.MyDialogFragmentStyle);
+
+        super.onCreate(savedInstanceState);
     }
 
     private void setupViews(View view) {
