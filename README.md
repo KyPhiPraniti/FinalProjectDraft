@@ -41,7 +41,7 @@ Plan ahead and schedule different tasks based on your daily activities. FitnessT
 Here's a walkthrough of implemented user stories:
 - Final Demo
 
-<img src='https://i.imgur.com/oJ41Mal.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/MWUJwIb.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 - Sprint 2 Demo:
 <img src='http://i.imgur.com/hb489iF.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
