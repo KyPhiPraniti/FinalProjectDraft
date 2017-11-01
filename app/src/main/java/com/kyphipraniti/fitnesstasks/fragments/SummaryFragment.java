@@ -1,5 +1,8 @@
 package com.kyphipraniti.fitnesstasks.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,10 +27,6 @@ import com.kyphipraniti.fitnesstasks.adapters.ProgressPhotoAdapter;
 import com.kyphipraniti.fitnesstasks.adapters.TasksAdapter;
 import com.kyphipraniti.fitnesstasks.model.Task;
 import com.kyphipraniti.fitnesstasks.utils.Constants;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class SummaryFragment extends Fragment {
 
@@ -70,10 +69,8 @@ public class SummaryFragment extends Fragment {
         rvTasks = v.findViewById(R.id.rvTasks);
 
         mTasks = new ArrayList<>();
-        //mTasks = CalendarFragment.getCompletedTasks();
-        Collections.sort(mTasks);
-        TasksAdapter adapter = new TasksAdapter(mTasks);
-        rvTasks.setAdapter(adapter);
+        mTaskAdapter = new TasksAdapter(mTasks);
+        rvTasks.setAdapter(mTaskAdapter);
 
         tvProgressPhotos = v.findViewById(R.id.tvProgressPhotos);
         rvProgressPhotos = v.findViewById(R.id.rvProgressPhotos);
