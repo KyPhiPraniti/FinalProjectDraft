@@ -69,8 +69,8 @@ public class WakefulReceiver extends WakefulBroadcastReceiver {
 
     private static void completeWakefulIntent(Context context, Task task) {
         NotificationUtil notificationUtil = new NotificationUtil(context);
-        Notification.Builder notificationBuilder = notificationUtil.getNotificationTask(task.getTitle(),
-                task.getAction() + " " + task.getAmount() + " " + task.getUnits());
+        Notification.Builder notificationBuilder = notificationUtil.getNotificationTask(task.getAction(),
+                task.getAction() + " " + task.getAmount() + "x" + task.getUnits());
         notificationUtil.notify(1001, notificationBuilder);
     }
 }
