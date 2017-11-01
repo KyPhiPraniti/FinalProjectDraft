@@ -8,4 +8,5 @@ public class Constants {
     public static final String FIREBASE_CHILD_DEADLINE = "deadline";
     public static final String FIREBASE_CHILD_PHOTOS = "photos";
     public static final String FIREBASE_CHILD_COMPLETED = "completed";
+    public static final String TASK_CHANNEL = "TASK_CHANNEL";
 }

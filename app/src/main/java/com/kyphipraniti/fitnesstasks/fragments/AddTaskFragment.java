@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -20,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kyphipraniti.fitnesstasks.R;
 import com.kyphipraniti.fitnesstasks.model.Task;
+import com.kyphipraniti.fitnesstasks.receivers.WakefulReceiver;
+import com.kyphipraniti.fitnesstasks.utils.Constants;
 import com.kyphipraniti.fitnesstasks.utils.Utils;
 
 public class AddTaskFragment extends DialogFragment {
@@ -35,8 +39,12 @@ public class AddTaskFragment extends DialogFragment {
     private TimePicker mDeadlineTimePicker;
 
 
+
     public AddTaskFragment() {
         // Required empty public constructor
+    }
+
+    private void createNotification(Task task) {
     }
 
     public static AddTaskFragment newInstance() {
@@ -87,8 +95,10 @@ public class AddTaskFragment extends DialogFragment {
                 }
                 String units = mUnitsEditText.getText().toString();
 
-                Task.writeTask(action, amount, units, dateTime);
+                Task writtenTask = Task.writeTask(action, amount, units, dateTime);
 
+                WakefulReceiver wakefulReceiver = new WakefulReceiver();
+                wakefulReceiver.setAlarm(getContext(), writtenTask);
                 dismiss();
             }
 
